@@ -1,0 +1,32 @@
+﻿@model AnkiFlashCards.Models.DTO.SubjectDto
+
+@{
+    ViewData["Title"] = "Create new Subject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create new Subject</h2>
+<hr />
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                @Html.TextBoxFor(x => x.Title, htmlAttributes: new { style = "width: 100%;" })
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,51 @@
+﻿@model AnkiFlashCards.Models.DTO.EditCardDto
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+</script>
+<h1>Edit card for Deck: @Html.DisplayFor(m => m.DeckTitle)</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(m => m.CardId)
+        <div class="form-group">
+                <label asp-for="Front" class="control-label"></label>
+                <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addXMP('@Html.IdFor(m=>m.Front)')" />
+                @Html.TextAreaFor(x => x.Front, 5, 500, htmlAttributes: new { style = "max-width: 100%;" })
+                <span asp-validation-for="Front" class="text-danger"></span>
+                <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addXMP('@Html.IdFor(m=>m.Front)')" />
+        </div>
+            <div class="form-group">
+                <label asp-for="Back" class="control-label"></label>
+                <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addXMP('@Html.IdFor(m=>m.Back)')" />
+                @Html.TextAreaFor(x => x.Back, 15, 500, htmlAttributes: new { style = "max-width: 100%;" })
+                <span asp-validation-for="Back" class="text-danger"></span>
+                <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addXMP('@Html.IdFor(m=>m.Back)')" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Level" class="control-label"></label>
+                <select asp-for="Level" asp-items="@Html.GetEnumSelectList<AnkiFlashCards.Models.Domain.DifficultyLevel>()"></select>
+                <span asp-validation-for="Level" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <a asp-controller="Card" asp-action="Delete" asp-route-CardId="@Model.CardId">Delete</a> |
+        <a asp-controller="Card" asp-action="Create" asp-route-DeckId="@Model.DeckId">Create New Card</a> |
+        <a asp-controller="Card" asp-action="Index" asp-route-DeckId="@Model.DeckId">Back to Cards</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

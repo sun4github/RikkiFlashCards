@@ -1,0 +1,21 @@
+﻿@model RikkiFlashCards.Components.PaginationBuilder
+<style>
+    .active2 {
+        background-color: #666;
+        color: white;
+    }
+</style>
+<span>
+    <br />
+    @for (int i = 0; i < Model.PaginationLinks.Count; i++)
+    {
+        if (i == Model.CurrentPage-1)
+        {
+            <a class="active" href="@Model.PaginationLinks[i]">@(i + 1)</a>
+        }
+        else
+        {
+            <a href="@Model.PaginationLinks[i]">@(i + 1)</a>
+        }
+    }
+</span>

@@ -1,0 +1,99 @@
+﻿
+a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.active {
+    background-color: #666;
+    color: white;
+}
+
+.previous {
+    background-color: #ff6a00;
+    color: black;
+}
+
+.next {
+    background-color: #7bae27;
+    color: white;
+}
+
+.round
+{
+    /*display: inline-block;*/
+    border: 1px solid #444348;
+    border-radius: 5px;
+    margin: 1px;
+    padding: 2px;
+    box-sizing: border-box;
+    color: #444348;
+    font-size: 14px;
+    font-weight:bold;
+    cursor: pointer;
+}
+
+/*
+code, samp, kbd {
+    font-family: "Courier New", Courier, monospace, sans-serif;
+    text-align: left;
+    color: #7a2953;
+}
+*/
+
+/*
+pre code {
+    line-height: 2.5em;
+    font-size: 14px;
+}
+
+pre {
+    padding: 0.1em 0.5em 0.3em 0.7em;
+    border-left: 8px solid #ccc;
+    margin: 0.5em 0 1.0em 0.3em;
+    overflow: auto;
+    width: 93%;
+    /*font-family: "Courier New", Courier, monospace, sans-serif;*/
+    text-align: left;
+    color: #a34b0c;
+    background-color: #e0e8cf;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+}
+
+
+.codeBit {
+    line-height: 2.5em;
+    font-size: 14px;
+    padding: 0.1em 0.5em 0.3em 0.7em;
+    border-left: 8px solid #ccc;
+    margin: 1.0em 0 1.0em 0.3em;
+    overflow: auto;
+    width: 93%;
+    /*font-family: "Courier New", Courier, monospace, sans-serif;*/
+    text-align: left;
+    color: #a34b0c;
+    background-color: #e0e8cf;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+}
+   
+*/
+
+/* target IE7 and IE6 
+*:first-child + html pre {
+    padding-bottom: 2em;
+    overflow-y: hidden;
+    overflow: visible;
+    overflow-x: auto;
+}
+
+* html pre {
+    padding-bottom: 2em;
+    overflow: visible;
+    overflow-x: auto;
+}*/

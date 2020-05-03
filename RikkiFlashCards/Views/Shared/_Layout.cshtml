@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>@ViewData["Title"] - Rikki Flash Cards</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/img/favicon.png" rel="icon">
+    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/vendor/venobox/venobox.css" rel="stylesheet">
+    @*<link href="~/vendor/owl.carousel/~/owl.carousel.min.css" rel="stylesheet">*@
+    <link href="~/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/MyStyleSheet.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Ninestars - v2.0.0
+    * Template URL: https://bootstrapmade.com/ninestars-free-bootstrap-3-theme-for-creative/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <script>
+        var isTagOpened = false;
+        function addXMP(elementId) {
+            //document.getElementById(elementId).value += "\r\n<xmp name='codeBlock'>\r\n\r\n</xmp>\r\n";
+            var curElementVal = document.getElementById(elementId).value;
+            var appendForwardNL = (curElementVal.length > 0)?("\r\n"): ("");
+            //document.getElementById(elementId).value += appendForwardNL + "<pre class='notranslate'><code  name='codeBlock' class='c#'>\r\n\r\n</code></pre>\r\n";
+            document.getElementById(elementId).value += appendForwardNL + "<code>\r\n\r\n</code>\r\n";
+            /*
+                var curBack = document.getElementById(elementId).value;
+                if (isTagOpened == false) {
+                    document.getElementById(elementId).value += "\r\n<xmp name='codeBlock'>\r\n</xmp>\r\n";
+                    isTagOpened = true;
+                }
+                else {
+                    document.getElementById(elementId).value += "\r\n</xmp>";
+                    isTagOpened = false;
+                }
+            */
+    }
+
+    function stripBRtoRN() {
+        var codeBlocks = document.getElementsByName("codeBlock");
+        codeBlocks.forEach(x => {
+            x.innerHTML = x.innerHTML.replace(/<br>/g, "\r\n");
+            x.innerHTML = escapeHtml(x.innerHTML);
+            //alert(x.innerHTML);
+        });
+
+    }
+
+    function escapeHtml(text) {
+    alert('text input ' + text)
+        var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+        };
+
+        //var replacedText = text.replace(/[&<>"']/g, function (m) { alert('found: ' + m); alert('replaced with: ' + map[m]); return map[m]; });
+        var replacedText = text.replace(/[&<>"']/g, function (m) { return map[m]; });
+        alert('text output ' + replacedText);
+        return replacedText;
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container-fluid d-flex">
+
+            <div class="logo mr-auto">
+                <h1 class="text-light"><a asp-controller="Subject" asp-action="Index"><span>Rikki Flash Cards</span></a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="~/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class="active"><a asp-controller="Subject" asp-action="Index">Home</a></li>
+                    <li class="drop-down">
+                        <a href="">Drop Down</a>
+                        <ul>
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li class="drop-down">
+                                <a href="#">Drop Down 2</a>
+                                <ul>
+                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                    <li><a href="#">Deep Drop Down 2</a></li>
+                                    <li><a href="#">Deep Drop Down 3</a></li>
+                                    <li><a href="#">Deep Drop Down 4</a></li>
+                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#">Drop Down 4</a></li>
+                            <li><a href="#">Drop Down 5</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li class="get-started"><a href="#about">Get Started</a></li>
+                </ul>
+            </nav><!-- .nav-menu -->
+
+        </div>
+    </header><!-- End Header -->
+    <main id="main">
+        <section id="services" class="services section-bg">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </section>
+    </main>
+
+
+    <!-- End #main -->
+    <!-- ======= Footer ======= --><!-- End Footer -->
+    <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+    <!-- CDN link for google prettify, to enable displaying c-sharp code in browser -->
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/jquery.easing/jquery.easing.min.js"></script>
+    <script src="~/vendor/php-email-form/validate.js"></script>
+    <script src="~/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="~/vendor/venobox/venobox.min.js"></script>
+    <script src="~/vendor/owl.carousel/owl.carousel.min.js"></script>
+    <script src="~/vendor/aos/aos.js"></script>
+    <!-- Template Main JS File -->
+    <script src="~/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+
+</html>

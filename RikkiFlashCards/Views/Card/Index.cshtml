@@ -1,0 +1,113 @@
+﻿@model AnkiFlashCards.Models.DTO.CardListDto
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Cards for  @Html.DisplayFor(model => model.DeckTitle)</h1>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Deck" asp-action="Index" asp-route-ResourceId="@Model.ResourceId">Back to Decks</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<p>
+    <a class="nav-link" asp-action="Create" asp-route-DeckId="@Model.DeckId">Create New Card</a>
+</p>
+<div>
+    <form asp-action="Index">
+        <div class="form-group">
+            <label asp-for="SearchFor" class="control-label"></label>
+            @Html.TextBoxFor(x => x.SearchFor, htmlAttributes: new { style = "max-width: 100%;" })
+            <span asp-validation-for="SearchFor" class="text-danger"></span>
+            <input type="submit" value="Search" class="btn btn-primary" />
+            <a class="btn-link" asp-action="Index" asp-route-DeckId="@Model.DeckId">Clear Search</a>
+        </div>
+        @Html.HiddenFor(m => m.DeckId)
+    </form>
+    
+</div>
+<div>
+    <hr />
+    @Html.HiddenFor(c => c.DeckId)
+    @Html.HiddenFor(c => c.ResourceId)
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsShared)
+        </dt>
+        <dd class="col-sm-10">
+            @if(Model.IsShared == true)
+            {
+            <span>Yes</span>
+            }
+            else
+            {
+            <span>No</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CardCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CardCount)
+        </dd>
+    </dl>
+    <div>
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalCardCount, itemsPerPage = ViewBag.ItemsPerPage })
+    </div>
+    <table class="table">
+        <thead>
+            <tr class="row">
+                <th class="col-md-1 col-sm-1 col-lg-1">
+                    ID
+                </th>
+                <th class="col-md-3 col-sm-3 col-lg-3">
+                    Front
+                </th>
+                <th class="col-md-5 col-sm-5 col-lg-5">
+                    Back
+                </th>
+                <th class="col-md-1 col-sm-1 col-lg-1">
+                    Level
+                </th>
+                <th class="col-md-2 col-sm-2 col-lg-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Cards)
+            {
+            <tr class="row">
+                <th class="col-md-1 col-sm-1 col-lg-1">
+                    @Html.DisplayFor(modelItem => item.CardId)
+                </th>
+                <td class="col-md-3 col-sm-3 col-lg-3">
+                    @Html.DisplayFor(modelItem => item.ShortFront)
+                </td>
+                <td class="col-md-5 col-sm-5 col-lg-5">
+                    @Html.DisplayFor(modelItem => item.ShortBack)
+                </td>
+                <td class="col-md-1 col-sm-1 col-lg-1">
+                    @Html.DisplayFor(modelItem => item.Level)
+                </td>
+                <td class="col-md-2 col-sm-2 col-lg-2">
+                    @Html.ActionLink("Details", "View", new { CardId = item.CardId }) |
+                    @Html.ActionLink("Edit Card", "Edit", new { CardId = item.CardId }) |
+                    @Html.ActionLink("Delete", "Delete", new { CardId = item.CardId })
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+    @*<div>
+        <a class="previous round" asp-controller="Card" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Prev" asp-route-DeckId="@Model.DeckId" asp-route-SearchFor="@Model.SearchFor">&#8249;&nbsp;Previous&nbsp;</a>
+        <a class="next round" asp-controller="Card" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Next" asp-route-DeckId="@Model.DeckId" asp-route-SearchFor="@Model.SearchFor">&nbsp;Next&nbsp;&#8250;</a>
+    </div>*@
+</div>

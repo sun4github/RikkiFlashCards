@@ -1,0 +1,54 @@
+﻿@model AnkiFlashCards.Models.DTO.ResourceEditDto
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Resource</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(r => r.ResourceId)
+            @Html.HiddenFor(r => r.SubjectId)
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            @Html.TextBoxFor(x => x.Title, htmlAttributes: new { style = "width: 100%;" })
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+            <div class="form-group">
+                <label asp-for="SubjectTitle" class="control-label"></label>
+                @Html.DisplayFor(er => er.SubjectTitle)
+            </div>
+            <div class="form-group">
+                <label asp-for="Url" class="control-label"></label>
+                @Html.TextBoxFor(x => x.Url, htmlAttributes: new { style = "width: 100%;" })
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <select asp-for="Type" asp-items="Html.GetEnumSelectList<AnkiFlashCards.Models.Domain.ResourceType>()">
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                @Html.TextAreaFor(x => x.Notes, 5, 200, htmlAttributes: new { style = "max-width: 100%;" })
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@Model.SubjectId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,72 @@
+﻿@model AnkiFlashCards.Models.DTO.RevisionViewDto
+
+@{
+    ViewData["Title"] = "ViewRevisionSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Revision Summary for Revision @Html.DisplayFor(m=>m.RevisionId)</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DeckTitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DeckTitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RevisedCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RevisedCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsExam)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.IsExam == true)
+            {
+                <span>Yes</span>
+            }
+            else
+            {
+                <span>No</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (Model.IsExam == false)
+    {
+        <a asp-controller="Deck" asp-action="Revise" asp-route-DeckId="@Model.DeckId">Revise again</a>
+    }
+    else
+    {
+        <a asp-controller="Deck" asp-action="Revise" asp-route-DeckId="@Model.DeckId">Revise</a>
+    }
+    |
+    @if (Model.IsExam == true)
+    {
+        <a asp-controller="Deck" asp-action="Quiz" asp-route-DeckId="@Model.DeckId">Quiz again</a>
+    }
+    else
+    {
+        <a asp-controller="Deck" asp-action="Quiz" asp-route-DeckId="@Model.DeckId">Quiz</a>
+    }
+    |
+    <a asp-controller="Deck" asp-action="Index" asp-route-ResourceId="@Model.ResourceId">Back to Decks</a>
+</div>

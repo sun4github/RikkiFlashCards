@@ -1,0 +1,102 @@
+﻿@model AnkiFlashCards.Models.DTO.DeckListDto
+@using AnkiFlashCards.Models.Domain;
+@{
+
+    ViewData["Title"] = "Decks in " + @Model.ResourceTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Decks in resource: @Html.DisplayFor(model => model.ResourceTitle)</h1>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@Model.SubjectId">Back to Resources</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<p>
+    <a class="nav-link" asp-action="Create" asp-route-ResourceId="@Model.ResourceId">Create New</a>
+</p>
+<div>
+    <div>
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalDeckCount, itemsPerPage = ViewBag.ItemsPerPage })
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Deck Title
+                </th>
+                <th>
+                    Shared
+                </th>
+                <th>
+                    Card Count
+                </th>
+                <th>
+                    <h6><b>Last Revised (count)</b></h6>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Decks)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @if (item.IsShared == true)
+                        {
+                            <span>Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.LastRevisionDateTime) ( @Html.DisplayFor(modelItem => item.RevisionCount) )
+                    </td>
+                    <td>
+                        <span>
+                            @Html.ActionLink("Details", "View", new { DeckId = item.DeckId }) |
+                            @Html.ActionLink("Edit Deck", "Edit", new { DeckId = item.DeckId }) |
+                            @if (item.CardCount > 0)
+                            {
+                                <span>
+                                    <a asp-controller="Card" asp-action="Index" asp-route-DeckId="@item.DeckId">Edit Cards</a> |
+                                    @Html.ActionLink("Revise", "Revise", new { DeckId = item.DeckId })|
+                                    @Html.ActionLink("Quiz", "Quiz", new { DeckId = item.DeckId })|
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    <a class="nav-link" asp-controller="Card" asp-action="Create" asp-route-DeckId="@item.DeckId">Create Card</a> |
+                                </span>
+
+                            }
+                            @Html.ActionLink("Delete", "Delete", new { DeckId = item.DeckId })
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+    @*<div>
+        <a class="previous round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Prev" asp-route-ResourceId="@Model.ResourceId">Previous</a> |
+        <a class="next round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Next" asp-route-ResourceId="@Model.ResourceId">Next</a>
+    </div>*@
+</div>
+

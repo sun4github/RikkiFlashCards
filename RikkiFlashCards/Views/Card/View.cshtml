@@ -1,0 +1,51 @@
+﻿@model AnkiFlashCards.Models.DTO.CardViewDto
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    
+    <h1>View Card for Deck: @Html.DisplayFor(m => m.DeckTitle)</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-12">
+            @Html.DisplayNameFor(model => model.DeckTitle)
+        </dt>
+        <dd class = "col-sm-12">
+            @Html.DisplayFor(model => model.DeckTitle)
+        </dd>
+        <dt class = "col-sm-12">
+            @Html.DisplayNameFor(model => model.Front)
+        </dt>
+        <dd class="col-sm-12">
+            <span id="BackId" style="color:tomato;font-family:ABeeZee;font-display:block;font-size:medium; visibility:visible">
+                    @Html.Raw(@Model.Front)
+            </span>
+        </dd>
+        <dt class = "col-sm-12">
+            @Html.DisplayNameFor(model => model.Back)
+        </dt>
+        <dd class="col-sm-12">
+            <span id="BackId" style="color:blueviolet;font-family:ABeeZee;font-display:block;font-size:medium; visibility:visible">
+                @Html.Raw(@Model.Back)
+            </span>
+        </dd>
+        <dt class = "col-sm-12">
+            @Html.DisplayNameFor(model => model.Level)
+        </dt>
+        <dd class = "col-sm-12">
+            @Html.DisplayFor(model => model.Level)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="Card" asp-action="Edit" asp-route-CardId="@Model.CardId">Edit</a> |
+    <a asp-controller="Card" asp-action="Delete" asp-route-CardId="@Model.CardId">Delete</a> |
+    <a asp-controller="Card" asp-action="Create" asp-route-DeckId="@Model.DeckId">Create New Card</a> |
+    <a asp-controller="Card" asp-action="Index" asp-route-DeckId="@Model.DeckId">Back to Cards</a>
+</div>
+<script type="text/javascript">
+    //stripBRtoRN();
+</script>

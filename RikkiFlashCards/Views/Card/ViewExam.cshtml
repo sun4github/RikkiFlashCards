@@ -1,0 +1,92 @@
+﻿@model AnkiFlashCards.Models.DTO.CardRevisionViewDto
+@using AnkiFlashCards.Services;
+
+@{
+    ViewData["Title"] = ((Model.IsExam == true) ? "Quiz for Deck " : "Revision card for Deck ") + @Model.DeckTitle;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>
+    @if (Model.IsExam == true)
+    {
+        <span>Quiz for </span>
+    }
+    else
+    {
+        <span>Revision for </span>
+    }
+    Deck: @Html.DisplayFor(m => m.DeckTitle)
+
+</h1>
+<script>
+    function setBackVisibility(val) {
+        document.getElementById("BackId").style.visibility = val;
+    }
+
+    function HideUnhide() {
+        var curState = document.getElementById("BackId").style.visibility;
+        if (curState == "visible") {
+            document.getElementById("BackId").style.visibility = "hidden";
+        } else {
+            document.getElementById("BackId").style.visibility = "visible";
+        }
+    }
+</script>
+<div>
+    <h4>
+        <a asp-controller="Deck" asp-action="EndRevision" asp-route-RevisionId="@Model.RevisionId" class="btn btn-sm btn-outline-danger">End Revision</a>
+    </h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-12 text-info">
+            @Html.DisplayFor(model => model.TotalRevisedCount) of @Html.DisplayFor(model => model.TotalCardCount)
+        </dt>
+        <dt class="col-sm-12">
+            @Html.DisplayNameFor(model => model.DeckTitle)
+        </dt>
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.DeckTitle)
+        </dd>
+        <dt class="col-sm-12">
+            @Html.DisplayNameFor(model => model.Front)
+        </dt>
+        <dd class="col-sm-12">
+            <span id="FrontId" style="color:tomato;font-family:ABeeZee;font-display:block;font-size:medium; visibility:visible">
+                @Html.Raw(@Model.Front)
+            </span>
+        </dd>
+        <dt class="col-sm-12">
+            @Html.DisplayNameFor(model => model.Back)
+        </dt>
+        <dd class="col-sm-12">
+            @if (Model.IsExam)
+            {
+                <span id="BackHideId" style="color:darkolivegreen;">
+                    <input type="button" value="Toggle" class="btn btn-sm btn-info" onclick="HideUnhide()" />
+                </span>
+            }
+            <hr />
+            <span id="BackId" style="color:blueviolet;font-family:ABeeZee;font-display:block;font-size:medium; visibility:visible">
+                @Html.Raw(@Model.Back)
+            </span>
+            @if (Model.IsExam)
+            {
+                <script>setBackVisibility("hidden");</script>
+            }
+        </dd>
+        <dt class="col-sm-12">
+            @Html.DisplayNameFor(model => model.Level)
+        </dt>
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Level)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="previous round" asp-controller="Card" asp-action="PrevCard" asp-route-direction="Prev" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Previous</a> |
+    <a class="next round" asp-controller="Card" asp-action="NextCard" asp-route-direction="Next" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Next</a>
+</div>
+<script type="text/javascript">
+    //stripBRtoRN();
+</script>

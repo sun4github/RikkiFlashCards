@@ -1,0 +1,51 @@
+﻿@model AnkiFlashCards.Models.DTO.SubjectListDto
+
+@{
+    ViewData["Title"] = "Subjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List of Subjects</h2>
+<div class="container-fluid">
+    <p>
+        <a asp-action="Create">Create new Subject</a>
+    </p>
+    <div>
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.Subjects.Count(), itemsPerPage = ViewBag.ItemsPerPage })
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Title
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Subjects)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SubjectId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { SubjectId = item.SubjectId }) |
+                        @Html.ActionLink("Delete", "Delete", new { SubjectId = item.SubjectId }) |
+                        <a asp-area="" asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@item.SubjectId">Resources</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@*<div>
+    <a asp-controller="Subject" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Prev">Previous</a> |
+    <a asp-controller="Subject" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Next">Next</a>
+</div>*@
