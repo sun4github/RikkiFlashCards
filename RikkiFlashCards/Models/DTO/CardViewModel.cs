@@ -6,7 +6,7 @@ using AnkiFlashCards.Models.Domain;
 
 namespace AnkiFlashCards.Models.DTO
 {
-    public class CardDto
+    public class CardViewModel
     {
         public int CardId { get; set; }
         public int DeckId { get; set; }
