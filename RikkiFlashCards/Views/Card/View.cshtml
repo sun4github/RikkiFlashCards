@@ -43,6 +43,7 @@
 <div>
     <a asp-controller="Card" asp-action="Edit" asp-route-CardId="@Model.CardId">Edit</a> |
     <a asp-controller="Card" asp-action="Delete" asp-route-CardId="@Model.CardId">Delete</a> |
+    <a asp-controller="Card" asp-action="Clone" asp-route-CardId="@Model.CardId">Clone</a> |
     <a asp-controller="Card" asp-action="Create" asp-route-DeckId="@Model.DeckId">Create New Card</a> |
     <a asp-controller="Card" asp-action="Index" asp-route-DeckId="@Model.DeckId">Back to Cards</a>
 </div>

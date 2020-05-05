@@ -43,16 +43,42 @@ namespace AnkiFlashCards.Controllers
         }
 
         [HttpGet]
-        public ViewResult Create(int DeckId)
+        public RedirectToActionResult Clone(int CardId)
         {
-            var dck = repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
+            var crd = deckService.GetCard(CardId);
+            var dck = deckService.GetDeck(crd.DeckId);
             var newCardDto = new CreateCardDto
             {
-                DeckId = DeckId,
-                DeckTitle = dck.Title
+                DeckId = dck.DeckId,
+                Front = crd.Front,
+                Back = crd.Back,
+                Level = crd.Level
             };
-            return View(newCardDto);
+            return RedirectToAction("Create",  newCardDto );
         }
+
+        [HttpGet]
+        public ViewResult Create(int DeckId, CreateCardDto createCardDto)
+        {
+            
+            if (String.IsNullOrWhiteSpace(createCardDto.Front) && String.IsNullOrWhiteSpace(createCardDto.Back))
+            {
+                var dck = repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
+                var aNewCardDto = new CreateCardDto
+                {
+                    DeckId = DeckId,
+                    DeckTitle = dck.Title
+                };
+                ModelState.Clear();
+                return View(aNewCardDto);
+            }
+            else
+            {
+                return View(createCardDto);
+            }
+        }
+
+      
 
         [HttpPost]
         public ActionResult Create(CreateCardDto createCardDto)
@@ -77,6 +103,7 @@ namespace AnkiFlashCards.Controllers
                 return View();
             }
         }
+
 
         [HttpGet]
         public ViewResult Edit(int CardId)
