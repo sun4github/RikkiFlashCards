@@ -43,39 +43,32 @@ namespace AnkiFlashCards.Controllers
         }
 
         [HttpGet]
-        public RedirectToActionResult Clone(int CardId)
+        public ViewResult Clone(int CardId)
         {
             var crd = deckService.GetCard(CardId);
             var dck = deckService.GetDeck(crd.DeckId);
             var newCardDto = new CreateCardDto
             {
                 DeckId = dck.DeckId,
+                DeckTitle = dck.Title,
                 Front = crd.Front,
                 Back = crd.Back,
                 Level = crd.Level
             };
-            return RedirectToAction("Create",  newCardDto );
+            return View("Create",  newCardDto );
         }
 
         [HttpGet]
         public ViewResult Create(int DeckId, CreateCardDto createCardDto)
         {
-            
-            if (String.IsNullOrWhiteSpace(createCardDto.Front) && String.IsNullOrWhiteSpace(createCardDto.Back))
+            var dck = repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
+            var aNewCardDto = new CreateCardDto
             {
-                var dck = repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
-                var aNewCardDto = new CreateCardDto
-                {
-                    DeckId = DeckId,
-                    DeckTitle = dck.Title
-                };
-                ModelState.Clear();
-                return View(aNewCardDto);
-            }
-            else
-            {
-                return View(createCardDto);
-            }
+                DeckId = DeckId,
+                DeckTitle = dck.Title
+            };
+            ModelState.Clear();
+            return View(aNewCardDto);
         }
 
       
