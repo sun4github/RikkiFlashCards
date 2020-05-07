@@ -75,6 +75,10 @@ namespace AnkiFlashCards.Data
             modelBuilder.Entity<Resource>()
                     .HasIndex(r => new { r.Title })
                     .HasName("IX_SearchResources");
+
+            modelBuilder.Entity<Deck>()
+                .HasIndex(d => d.Title)
+                .HasName("IX_SearchDeck");
         }
 
     //    public static readonly ILoggerFactory MyLoggerFactory
