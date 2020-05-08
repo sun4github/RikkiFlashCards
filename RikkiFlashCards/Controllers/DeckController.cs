@@ -22,15 +22,9 @@ namespace AnkiFlashCards.Controllers
             this.repositoryWrapper = repositoryWrapper;
         }
 
-        //public ViewResult Index(int ResourceId, String Direction, int Skip = 0, int Take = 5)
-        //{
-        //    var deckList = deckService.ListDecks(ResourceId, Direction, Skip, Take);
-        //    return View(deckList);
-        //}
-
-        public ViewResult Index(int ResourceId, int NextPage=1)
+        public ViewResult Index(int ResourceId, int NextPage=1, string OrderBy = null)
         {
-            var deckList = deckService.ListDecks(ResourceId, NextPage, ItemsPerPage);
+            var deckList = deckService.ListDecks(ResourceId, NextPage, ItemsPerPage, OrderBy);
             ViewBag.ItemsPerPage = ItemsPerPage;
             return View(deckList);
         }
@@ -119,7 +113,7 @@ namespace AnkiFlashCards.Controllers
                 CardCount = dck.CardCount,
                 RevisionCount = dck.RevisionCount,
                 ResourceTitle = res.Title,
-                LastRevisionDateTime = (lastRevisionTime != DateTime.MinValue) ? (string.Concat(lastRevisionTime?.ToShortDateString(), " ", lastRevisionTime?.ToShortTimeString())) : ("Not Revised")
+                LastRevisionDateString = (lastRevisionTime != DateTime.MinValue) ? (string.Concat(lastRevisionTime?.ToShortDateString(), " ", lastRevisionTime?.ToShortTimeString())) : ("Not Revised")
             };
             return View(curDeckDto);
         }

@@ -29,7 +29,7 @@ namespace AnkiFlashCards.Services
         public void EditDeck(Deck editDeck);
         public void DeleteDeck(int DeckId);
         //public DeckListDto ListDecks(int ResourceId, String Direction, int Skip=0, int Take=10);
-        public DeckListDto ListDecks(int ResourceId, int NextPage, int ItemsPerPage);
+        public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null);
         public Revision ReviseDeck(int DeckId, bool isExam);
         public void EndRevision(int RevisionId);
         public Revision GetRevision(int RevisonId);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AnkiFlashCards.Models.DTO
 {
-    public class DeckListDto
+    public class DeckListViewModel
     {
         public int Skip { get; set; }
         public int Take { get; set; }

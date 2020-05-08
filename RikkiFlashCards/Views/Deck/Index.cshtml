@@ -1,4 +1,4 @@
-﻿@model AnkiFlashCards.Models.DTO.DeckListDto
+﻿@model AnkiFlashCards.Models.DTO.DeckListViewModel
 @using AnkiFlashCards.Models.Domain;
 @{
 
@@ -30,16 +30,20 @@
         <thead>
             <tr>
                 <th>
-                    Deck Title
+                    <a asp-action="Index" asp-route-OrderBy="Title" asp-route-ResourceId="@Model.ResourceId">Deck Title</a>
                 </th>
                 <th>
                     Shared
                 </th>
                 <th>
-                    Card Count
+                    <a asp-action="Index" asp-route-OrderBy="CardCount" asp-route-ResourceId="@Model.ResourceId">Card Count</a>
                 </th>
                 <th>
-                    <h6><b>Last Revised (count)</b></h6>
+                    <h6>
+                        <b>
+                            <a asp-action="Index" asp-route-OrderBy="LastRevisionDateTime" asp-route-ResourceId="@Model.ResourceId">Last Revised (count)</a>
+                        </b>
+                    </h6>
                 </th>
                 <th></th>
             </tr>
@@ -65,7 +69,7 @@
                         @Html.DisplayFor(modelItem => item.CardCount)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem=>item.LastRevisionDateTime) ( @Html.DisplayFor(modelItem => item.RevisionCount) )
+                        @Html.DisplayFor(modelItem=>item.LastRevisionDateString) ( @Html.DisplayFor(modelItem => item.RevisionCount) )
                     </td>
                     <td>
                         <span>

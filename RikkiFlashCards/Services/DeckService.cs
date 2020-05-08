@@ -187,44 +187,7 @@ namespace AnkiFlashCards.Services
             return cList;
         }
 
-        //public DeckListDto ListDecks(int ResourceId, String Direction, int Skip = 0, int Take = 5)
-        //{
-        //    var selResource = this.repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
-        //                .Include(r => r.Decks)
-        //                    .ThenInclude(d=>d.Cards)
-        //                .Include(r=>r.Decks)
-        //                    .ThenInclude(d=>d.Revisions)
-        //                .First();
-
-        //    var decks = selResource.Decks.OrderBy(d => d.Title)
-        //                .Select(d => new DeckViewDto
-        //                {
-        //                    DeckId = d.DeckId,
-        //                    ResourceId = d.ResourceId,
-        //                    SubjectId = 0,
-        //                    ResourceTitle = d.Resource.Title,
-        //                    Title = d.Title,
-        //                    IsShared = d.IsShared,
-        //                    RevisionCount = d.RevisionCount,
-        //                    CardCount = d.CardCount,
-        //                    LastRevisionDateTime = d.Revisions.OrderByDescending(r=>r.EndTime).Select(r=>r.EndTime.ToShortDateString()).FirstOrDefault()??"Never Revised"
-        //                }).ToList();
-        //    Skip = NavigationHelper.CalculateSkip(Direction, Skip, Take, decks.Count());
-
-        //    var dList = new DeckListDto
-        //    {
-        //        ResourceId = ResourceId,
-        //        ResourceTitle = selResource.Title,
-        //        SubjectId = selResource.SubjectId,
-        //        Decks = decks.Skip(Skip).Take(Take),
-        //        Skip = Skip,
-        //        Take = Take
-        //    };
-        //    return dList;
-        //}
-
-
-        public DeckListDto ListDecks(int ResourceId, int NextPage, int ItemsPerPage)
+        public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null)
         {
             var selResource = this.repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
                         .Include(r => r.Decks)
@@ -233,7 +196,7 @@ namespace AnkiFlashCards.Services
                             .ThenInclude(d => d.Revisions)
                         .First();
 
-            var decks = selResource.Decks.OrderBy(d => d.Title)
+            var deckViews = selResource.Decks
                         .Select(d => new DeckViewDto
                         {
                             DeckId = d.DeckId,
@@ -244,19 +207,23 @@ namespace AnkiFlashCards.Services
                             IsShared = d.IsShared,
                             RevisionCount = d.RevisionCount,
                             CardCount = d.CardCount,
-                            LastRevisionDateTime = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime.ToShortDateString()).FirstOrDefault() ?? "Never Revised"
-                        }).ToList();
+                            LastRevisionDateString = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime.ToShortDateString()).FirstOrDefault() ?? "Never Revised",
+                            LastRevisionDateTime = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime).FirstOrDefault()
+                        })
+            .OrderBy(dv=>(OrderBy != null)? (dv.GetType().GetProperty(OrderBy).GetValue(dv)):(dv.Title))
+            .ToList();
 
-            var dList = new DeckListDto
+            var dList = new DeckListViewModel
             {
                 ResourceId = ResourceId,
                 ResourceTitle = selResource.Title,
                 SubjectId = selResource.SubjectId,
-                Decks = decks.Skip((NextPage-1) * ItemsPerPage).Take(ItemsPerPage),
+                Decks = deckViews.Skip((NextPage-1) * ItemsPerPage).Take(ItemsPerPage),
                 Skip = (NextPage - 1) *ItemsPerPage,
                 Take = ItemsPerPage,
-                TotalDeckCount = decks.Count()
+                TotalDeckCount = deckViews.Count()
             };
+
             return dList;
         }
 

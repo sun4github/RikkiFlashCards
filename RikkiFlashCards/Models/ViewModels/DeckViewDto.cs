@@ -23,7 +23,8 @@ namespace AnkiFlashCards.Models.DTO
         public int RevisionCount { get; set; }
         [DisplayName("Number of Cards")]
         public int CardCount { get; set; }
+        public string LastRevisionDateString { get; set; }
         [DisplayName("Last Revision Date & Time")]
-        public string LastRevisionDateTime { get; set; }
+        public DateTime LastRevisionDateTime { get; set; }
     }
 }
