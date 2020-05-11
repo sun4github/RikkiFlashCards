@@ -187,7 +187,7 @@ namespace AnkiFlashCards.Services
             return cList;
         }
 
-        public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null)
+        public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null, string SearchText = "")
         {
             var selResource = this.repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
                         .Include(r => r.Decks)
@@ -197,21 +197,22 @@ namespace AnkiFlashCards.Services
                         .First();
 
             var deckViews = selResource.Decks
-                        .Select(d => new DeckViewDto
-                        {
-                            DeckId = d.DeckId,
-                            ResourceId = d.ResourceId,
-                            SubjectId = 0,
-                            ResourceTitle = d.Resource.Title,
-                            Title = d.Title,
-                            IsShared = d.IsShared,
-                            RevisionCount = d.RevisionCount,
-                            CardCount = d.CardCount,
-                            LastRevisionDateString = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime.ToShortDateString()).FirstOrDefault() ?? "Never Revised",
-                            LastRevisionDateTime = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime).FirstOrDefault()
-                        })
-            .OrderBy(dv=>(OrderBy != null)? (dv.GetType().GetProperty(OrderBy).GetValue(dv)):(dv.Title))
-            .ToList();
+                                .Where(d => d.Title.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                                .Select(d => new DeckViewDto
+                                {
+                                    DeckId = d.DeckId,
+                                    ResourceId = d.ResourceId,
+                                    SubjectId = 0,
+                                    ResourceTitle = d.Resource.Title,
+                                    Title = d.Title,
+                                    IsShared = d.IsShared,
+                                    RevisionCount = d.RevisionCount,
+                                    CardCount = d.CardCount,
+                                    LastRevisionDateString = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime.ToShortDateString()).FirstOrDefault() ?? "Never Revised",
+                                    LastRevisionDateTime = d.Revisions.OrderByDescending(r => r.EndTime).Select(r => r.EndTime).FirstOrDefault()
+                                })
+                                .OrderBy(dv=>(OrderBy != null)? (dv.GetType().GetProperty(OrderBy).GetValue(dv)):(dv.Title))
+                                .ToList();
 
             var dList = new DeckListViewModel
             {

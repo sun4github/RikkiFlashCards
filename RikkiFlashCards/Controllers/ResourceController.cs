@@ -64,40 +64,22 @@ namespace AnkiFlashCards.Controllers
             }
         }
 
-        //public ViewResult Index(int SubjectId, String Direction, int Skip = 0, int Take = 5)
-        //{
-        //    var selSubj = this.repositoryWrapper.Subject.FindByCondition(s => s.SubjectId == SubjectId)
-        //        .Include(s => s.Resources)
-        //            .ThenInclude(r=>r.Decks)
-        //        .First();
-
-        //    var resources = selSubj.Resources.OrderBy(r => r.Title).ToList();
-        //    Skip = NavigationHelper.CalculateSkip(Direction, Skip, Take, resources.Count());
-
-        //    var ResourceListDto = new ResourceListDto()
-        //    {
-        //        SubjectId = SubjectId,
-        //        SubjectTitle = selSubj.Title,
-        //        Resources = resources.Skip(Skip).Take(Take),
-        //        Skip = Skip,
-        //        Take = Take
-        //    };
-        //    return View(ResourceListDto);
-        //}
-
-        public ViewResult Index(int SubjectId, int NextPage = 1)
+ 
+        public ViewResult Index(int ParentId, int NextPage = 1, string SearchText = "")
         {
-            var selSubj = this.repositoryWrapper.Subject.FindByCondition(s => s.SubjectId == SubjectId)
+            var selSubj = this.repositoryWrapper.Subject.FindByCondition(s => s.SubjectId == ParentId)
                 .Include(s => s.Resources)
                     .ThenInclude(r => r.Decks)
                 .First();
 
-            var resources = selSubj.Resources.OrderBy(r => r.Title).ToList();
+            var resources = selSubj.Resources
+                                .Where(r=> r.Title.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                                .OrderBy(r => r.Title).ToList();
             var Skip = (NextPage-1) * ItemsPerPage;
 
             var ResourceListDto = new ResourceListDto()
             {
-                SubjectId = SubjectId,
+                SubjectId = ParentId,
                 SubjectTitle = selSubj.Title,
                 Resources = resources.Skip(Skip).Take(ItemsPerPage),
                 Skip = Skip,

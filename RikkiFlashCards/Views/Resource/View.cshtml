@@ -55,6 +55,6 @@
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { ResourceId = Model.ResourceId }) |
-    <a asp-controller="Deck" asp-action="Index" asp-route-ResourceId="@Model.ResourceId">Decks</a> |
-    <a asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@Model.SubjectId">Back to List</a>
+    <a asp-controller="Deck" asp-action="Index" asp-route-ParentId="@Model.ResourceId">Decks</a> |
+    <a asp-controller="Resource" asp-action="Index" asp-route-ParentId="@Model.SubjectId">Back to List</a>
 </div>

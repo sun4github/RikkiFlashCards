@@ -22,8 +22,9 @@
     </div>
 </nav>
 <p>
-    <a class="nav-link" asp-action="Create" asp-route-SubjectId="@Model.SubjectId">Create new Resource</a>
+    <a class="nav-link" asp-action="Create" asp-route-SubjectId="@Model.SubjectId">Create new resource</a>
 </p>
+@await Html.PartialAsync("_SearchTitle",Model.SubjectId)
 <div class="container-fluid">
     <div>
         @await Component.InvokeAsync("Pagination", new { itemCount = Model.Resources.Count(), itemsPerPage = ViewBag.ItemsPerPage })
@@ -84,7 +85,7 @@
                         @Html.ActionLink("Delete", "Delete", new { ResourceId = item.ResourceId }) |
                         @if (item.DeckCount > 0)
                         {
-                            <a asp-area="" asp-controller="Deck" asp-action="Index" asp-route-ResourceId="@item.ResourceId">Decks</a>
+                            <a asp-area="" asp-controller="Deck" asp-action="Index" asp-route-ParentId="@item.ResourceId">Decks</a>
                         }
                         else
                         {

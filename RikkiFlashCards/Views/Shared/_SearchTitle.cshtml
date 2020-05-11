@@ -1,0 +1,12 @@
+﻿@model int
+    <div>
+        <form asp-action="Index" method="get">
+            <div class="form-group">
+                <input type="hidden" name="ParentId" value="@Model" />
+                <label class="control-label">Search Title</label>
+                <input type="text" name="SearchText" />
+                <input type="submit" value="Search" class="btn btn-primary" />
+                <a class="btn-link" asp-action="Index" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-route-ParentId="@Model">Clear Search</a>
+            </div>
+        </form>
+    </div>

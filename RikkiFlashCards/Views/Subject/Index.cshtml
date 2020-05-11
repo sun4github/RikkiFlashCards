@@ -38,7 +38,7 @@
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { SubjectId = item.SubjectId }) |
                         @Html.ActionLink("Delete", "Delete", new { SubjectId = item.SubjectId }) |
-                        <a asp-area="" asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@item.SubjectId">Resources</a>
+                        <a asp-area="" asp-controller="Resource" asp-action="Index" asp-route-ParentId="@item.SubjectId">Resources</a>
                     </td>
                 </tr>
             }

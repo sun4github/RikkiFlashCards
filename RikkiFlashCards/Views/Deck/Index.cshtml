@@ -14,14 +14,15 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Resource" asp-action="Index" asp-route-SubjectId="@Model.SubjectId">Back to Resources</a>
+                <a class="nav-link" asp-controller="Resource" asp-action="Index" asp-route-ParentId="@Model.SubjectId">Back to Resources</a>
             </li>
         </ul>
     </div>
 </nav>
 <p>
-    <a class="nav-link" asp-action="Create" asp-route-ResourceId="@Model.ResourceId">Create New</a>
+    <a class="nav-link" asp-action="Create" asp-route-ResourceId="@Model.ResourceId">Create new deck</a>
 </p>
+@await Html.PartialAsync("_SearchTitle",Model.ResourceId)
 <div>
     <div>
         @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalDeckCount, itemsPerPage = ViewBag.ItemsPerPage })
@@ -69,7 +70,7 @@
                         @Html.DisplayFor(modelItem => item.CardCount)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem=>item.LastRevisionDateString) ( @Html.DisplayFor(modelItem => item.RevisionCount) )
+                        @Html.DisplayFor(modelItem => item.LastRevisionDateString) ( @Html.DisplayFor(modelItem => item.RevisionCount) )
                     </td>
                     <td>
                         <span>
@@ -99,8 +100,8 @@
     </table>
     <hr />
     @*<div>
-        <a class="previous round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Prev" asp-route-ResourceId="@Model.ResourceId">Previous</a> |
-        <a class="next round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Next" asp-route-ResourceId="@Model.ResourceId">Next</a>
-    </div>*@
+            <a class="previous round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Prev" asp-route-ResourceId="@Model.ResourceId">Previous</a> |
+            <a class="next round" asp-controller="Deck" asp-action="Index" asp-route-Skip="@Model.Skip" asp-route-direction="Next" asp-route-ResourceId="@Model.ResourceId">Next</a>
+        </div>*@
 </div>
 

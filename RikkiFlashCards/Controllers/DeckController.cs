@@ -22,9 +22,9 @@ namespace AnkiFlashCards.Controllers
             this.repositoryWrapper = repositoryWrapper;
         }
 
-        public ViewResult Index(int ResourceId, int NextPage=1, string OrderBy = null)
+        public ViewResult Index(int ParentId, int NextPage=1, string OrderBy = null, string SearchText = "")
         {
-            var deckList = deckService.ListDecks(ResourceId, NextPage, ItemsPerPage, OrderBy);
+            var deckList = deckService.ListDecks(ParentId, NextPage, ItemsPerPage, OrderBy, SearchText);
             ViewBag.ItemsPerPage = ItemsPerPage;
             return View(deckList);
         }
