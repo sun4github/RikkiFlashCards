@@ -31,18 +31,18 @@
         <thead>
             <tr>
                 <th>
-                    <a asp-action="Index" asp-route-OrderBy="Title" asp-route-ResourceId="@Model.ResourceId">Deck Title</a>
+                    <a asp-action="Index" asp-route-OrderBy="Title" asp-route-ParentId="@Model.ResourceId">Deck Title</a>
                 </th>
                 <th>
                     Shared
                 </th>
                 <th>
-                    <a asp-action="Index" asp-route-OrderBy="CardCount" asp-route-ResourceId="@Model.ResourceId">Card Count</a>
+                    <a asp-action="Index" asp-route-OrderBy="CardCount" asp-route-ParentId="@Model.ResourceId">Card Count</a>
                 </th>
                 <th>
                     <h6>
                         <b>
-                            <a asp-action="Index" asp-route-OrderBy="LastRevisionDateTime" asp-route-ResourceId="@Model.ResourceId">Last Revised (count)</a>
+                            <a asp-action="Index" asp-route-OrderBy="LastRevisionDateTime" asp-route-ParentId="@Model.ResourceId">Last Revised (count)</a>
                         </b>
                     </h6>
                 </th>
