@@ -35,50 +35,43 @@
     ======================================================== -->
     <script>
         var isTagOpened = false;
-        function addXMP(elementId) {
-            //document.getElementById(elementId).value += "\r\n<xmp name='codeBlock'>\r\n\r\n</xmp>\r\n";
+
+        function addCodeTag(elementId) {
             var curElementVal = document.getElementById(elementId).value;
             var appendForwardNL = (curElementVal.length > 0)?("\r\n"): ("");
-            //document.getElementById(elementId).value += appendForwardNL + "<pre class='notranslate'><code  name='codeBlock' class='c#'>\r\n\r\n</code></pre>\r\n";
             document.getElementById(elementId).value += appendForwardNL + "<code>\r\n\r\n</code>\r\n";
-            /*
-                var curBack = document.getElementById(elementId).value;
-                if (isTagOpened == false) {
-                    document.getElementById(elementId).value += "\r\n<xmp name='codeBlock'>\r\n</xmp>\r\n";
-                    isTagOpened = true;
-                }
-                else {
-                    document.getElementById(elementId).value += "\r\n</xmp>";
-                    isTagOpened = false;
-                }
-            */
-    }
+        }
 
-    function stripBRtoRN() {
-        var codeBlocks = document.getElementsByName("codeBlock");
-        codeBlocks.forEach(x => {
-            x.innerHTML = x.innerHTML.replace(/<br>/g, "\r\n");
-            x.innerHTML = escapeHtml(x.innerHTML);
-            //alert(x.innerHTML);
-        });
+        function addCustomLinkTag(elementId) {
+            var curElementVal = document.getElementById(elementId).value;
+            var appendForwardNL = (curElementVal.length > 0)?("\r\n"): ("");
+            document.getElementById(elementId).value += " [link][/link]";
+        }
 
-    }
+        function stripBRtoRN() {
+            var codeBlocks = document.getElementsByName("codeBlock");
+            codeBlocks.forEach(x => {
+                x.innerHTML = x.innerHTML.replace(/<br>/g, "\r\n");
+                x.innerHTML = escapeHtml(x.innerHTML);
+            });
 
-    function escapeHtml(text) {
-    alert('text input ' + text)
-        var map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-        };
+        }
 
-        //var replacedText = text.replace(/[&<>"']/g, function (m) { alert('found: ' + m); alert('replaced with: ' + map[m]); return map[m]; });
-        var replacedText = text.replace(/[&<>"']/g, function (m) { return map[m]; });
-        alert('text output ' + replacedText);
-        return replacedText;
-    }
+        function escapeHtml(text) {
+        alert('text input ' + text)
+            var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+            };
+
+            //var replacedText = text.replace(/[&<>"']/g, function (m) { alert('found: ' + m); alert('replaced with: ' + map[m]); return map[m]; });
+            var replacedText = text.replace(/[&<>"']/g, function (m) { return map[m]; });
+            alert('text output ' + replacedText);
+            return replacedText;
+        }
     </script>
 </head>
 
