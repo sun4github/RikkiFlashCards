@@ -1,9 +1,9 @@
 ﻿@model int
-    <form asp-controller="Card" asp-action="SearchCardsInAllDecks" method="post">
+    <form asp-controller="Card" asp-action="SearchCardsInAllDecks" method="get">
         <div class="form-group">
             <input type="hidden" name="ResourceId" value="@Model" />
             <label class="control-label">Search All Cards</label>
-            <input type="text" name="SearchCardText" />
+            <input type="text" name="SearchFor" />
             <input type="submit" value="Search" class="btn btn-primary" />
         </div>
     </form>

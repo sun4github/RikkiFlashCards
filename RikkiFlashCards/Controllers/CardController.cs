@@ -36,10 +36,10 @@ namespace AnkiFlashCards.Controllers
         }
 
       
-        [HttpPost]
-        public ViewResult SearchCardsInAllDecks(int ResourceId, int NextPage = 1, String SearchCardText = "")
+        [HttpGet]
+        public ViewResult SearchCardsInAllDecks(int ResourceId, int NextPage = 1, String SearchFor = "")
         {   
-            var cardList = deckService.SearchCardsInResource(ResourceId, NextPage, ItemsPerPage, SearchCardText);
+            var cardList = deckService.SearchCardsInResource(ResourceId, NextPage, ItemsPerPage, SearchFor);
 
             ViewBag.ItemsPerPage = ItemsPerPage;
             return View(cardList);

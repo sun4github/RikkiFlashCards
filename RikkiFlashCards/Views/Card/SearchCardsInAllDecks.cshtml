@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Cards for  @Html.DisplayFor(model => model.DeckTitle)</h1>
+    <h1>Search results for  @Html.Raw("\"")@Html.DisplayFor(model => model.SearchFor)@Html.Raw("\"") in resource: @Html.DisplayFor(m => m.ResourceTitle)</h1>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -13,7 +13,7 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Deck" asp-action="Index" asp-route-ParentId="@Model.ResourceId">Back to Decks</a>
+                <a class="nav-link" asp-controller="Deck" asp-action="Index" asp-route-ParentId="@Model.ResourceId">Back to all decks in @Html.DisplayFor(m=>m.ResourceTitle)</a>
             </li>
         </ul>
     </div>
@@ -22,20 +22,7 @@
     <hr />
     @Html.HiddenFor(c => c.DeckId)
     @Html.HiddenFor(c => c.ResourceId)
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsShared)
-        </dt>
-        <dd class="col-sm-10">
-            @if(Model.IsShared == true)
-            {
-            <span>Yes</span>
-            }
-            else
-            {
-            <span>No</span>
-            }
-        </dd>
+    <dl class="row">        
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CardCount)
         </dt>
@@ -44,7 +31,7 @@
         </dd>
     </dl>
     <div>
-        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalCardCount, itemsPerPage = ViewBag.ItemsPerPage })
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalCardCount, itemsPerPage = ViewBag.ItemsPerPage, AdditionalRouteValues = new KeyValuePair<string, string>[] { new KeyValuePair<string, string>("ResourceId", Model.ResourceId.ToString()), new KeyValuePair<string, string>("SearchFor", Model.SearchFor) } })
     </div>
     <table class="table">
         <thead>

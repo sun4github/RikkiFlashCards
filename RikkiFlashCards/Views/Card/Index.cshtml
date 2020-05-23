@@ -60,7 +60,7 @@
         </dd>
     </dl>
     <div>
-        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalCardCount, itemsPerPage = ViewBag.ItemsPerPage })
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalCardCount, itemsPerPage = ViewBag.ItemsPerPage, AdditionalRouteValues = new KeyValuePair<string, string>[] { new KeyValuePair<string, string>("DeckId", Model.DeckId.ToString()), new KeyValuePair<string, string>("SearchFor", Model.SearchFor) } })
     </div>
     <table class="table">
         <thead>

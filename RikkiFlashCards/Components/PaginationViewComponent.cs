@@ -21,7 +21,7 @@ namespace RikkiFlashCards.Components
             this.urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
         }
 
-        public IViewComponentResult Invoke(int itemCount, int itemsPerPage)
+        public IViewComponentResult Invoke(int itemCount, int itemsPerPage, params KeyValuePair<string, string>[] AdditionalRouteValues)
         {
             var paginationObj = new PaginationBuilder
             {
@@ -32,6 +32,17 @@ namespace RikkiFlashCards.Components
 
             var queryValueDictionary = HttpContext.Request.Query.ToQueryValueDictionary();
             paginationObj.CurrentPage = (queryValueDictionary.ContainsKey("NextPage")) ? int.Parse(queryValueDictionary["NextPage"]):1;
+
+            if(AdditionalRouteValues != null)
+            {
+                foreach (var kvPair in AdditionalRouteValues)
+                {
+                    if(!queryValueDictionary.ContainsKey(kvPair.Key))
+                    {
+                        queryValueDictionary.Add(kvPair.Key, kvPair.Value);
+                    }
+                }
+            }
 
             for (int i = 1; i <= paginationObj.PageCount; i++)
             {

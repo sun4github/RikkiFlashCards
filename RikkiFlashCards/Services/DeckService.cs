@@ -178,6 +178,7 @@ namespace AnkiFlashCards.Services
                
                 DeckTitle = "All Decks",
                 ResourceId = selResource.ResourceId,
+                ResourceTitle = selResource.Title,
                 IsShared = false,
                 CardCount = cards.Count(),
                 Cards = cards.Skip((NextPage - 1) * ItemsPerPage).Take(ItemsPerPage),
