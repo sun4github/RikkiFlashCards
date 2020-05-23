@@ -22,7 +22,10 @@
 <p>
     <a class="nav-link" asp-action="Create" asp-route-ResourceId="@Model.ResourceId">Create new deck</a>
 </p>
-@await Html.PartialAsync("_SearchTitle",Model.ResourceId)
+<div class="input-group">
+    @await Html.PartialAsync("_SearchTitle", Model.ResourceId)
+    @await Html.PartialAsync("_SearchAllCardsInDeck", Model.ResourceId)
+</div>
 <div>
     <div>
         @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalDeckCount, itemsPerPage = ViewBag.ItemsPerPage })

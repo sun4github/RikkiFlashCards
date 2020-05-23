@@ -133,34 +133,6 @@ namespace AnkiFlashCards.Services
             return nextCard;
         }
 
-        //public CardListDto ListCards(int DeckId, String Direction, int Skip = 0, int Take = 10, String SearchFor = "")
-        //{
-        //    var selDeck = this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
-        //                .First();
-        //    IQueryable<Card> cards = this.repositoryWrapper.Card.FindByCondition(c => c.DeckId == DeckId);
-        //    if (!String.IsNullOrWhiteSpace(SearchFor))
-        //    {
-        //        cards = cards.Where(c => c.Front.Contains(SearchFor, StringComparison.OrdinalIgnoreCase) || c.Back.Contains(SearchFor, StringComparison.OrdinalIgnoreCase));
-        //    }
-        //    //cards = cards.ToList<Card>();
-            
-        //    Skip = NavigationHelper.CalculateSkip(Direction, Skip, Take, cards.Count());
-
-        //    var cList = new CardListDto
-        //    {
-        //        DeckId = DeckId,
-        //        DeckTitle = selDeck.Title,
-        //        ResourceId = selDeck.ResourceId,
-        //        IsShared = selDeck.IsShared,
-        //        CardCount = (!String.IsNullOrWhiteSpace(SearchFor)) ?(cards.Count()):(selDeck.CardCount),
-        //        Cards = cards.Skip(Skip).Take(Take),
-        //        SearchFor = SearchFor,
-        //        Skip = Skip,
-        //        Take = Take
-        //    };
-        //    return cList;
-        //}
-
         public CardListDto ListCards(int DeckId, int NextPage, int ItemsPerPage, String SearchFor = "")
         {
             var selDeck = this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
@@ -186,6 +158,37 @@ namespace AnkiFlashCards.Services
             };
             return cList;
         }
+
+        public CardListDto SearchCardsInResource(int ResourceId, int NextPage, int ItemsPerPage, String SearchFor = "")
+        {
+            var selResource = this.repositoryWrapper.Resource
+                                .FindByCondition(d => d.ResourceId == ResourceId)
+                                .Include(r => r.Decks)
+                                .First();
+            var selDeckIDs = selResource.Decks.Select(d => d.DeckId);
+            IQueryable<Card> cards = this.repositoryWrapper.Card.FindByCondition(c => selDeckIDs.Contains(c.DeckId));
+
+            if (!String.IsNullOrWhiteSpace(SearchFor))
+            {
+                cards = cards.Where(c => c.Front.Contains(SearchFor, StringComparison.OrdinalIgnoreCase) || c.Back.Contains(SearchFor, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var cList = new CardListDto
+            {
+               
+                DeckTitle = "All Decks",
+                ResourceId = selResource.ResourceId,
+                IsShared = false,
+                CardCount = cards.Count(),
+                Cards = cards.Skip((NextPage - 1) * ItemsPerPage).Take(ItemsPerPage),
+                SearchFor = SearchFor,
+                Skip = (NextPage - 1) * ItemsPerPage,
+                Take = ItemsPerPage,
+                TotalCardCount = cards.Count()
+            };
+            return cList;
+        }
+
 
         public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null, string SearchText = "")
         {

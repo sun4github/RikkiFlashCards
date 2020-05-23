@@ -25,19 +25,22 @@ namespace AnkiFlashCards.Controllers
             this.repositoryWrapper = repositoryWrapper;
         }
 
-        //[HttpGet]
-        //[HttpPost]
-        //public ViewResult Index(int DeckId, String Direction, int Skip = 0, int Take = 10, String SearchFor = "")
-        //{
-        //    var cardList = deckService.ListCards(DeckId, Direction, Skip, Take, SearchFor);
-        //    return View(cardList);
-        //}
-
         [HttpGet]
         [HttpPost]
         public ViewResult Index(int DeckId, int NextPage=1, String SearchFor = "")
         {
             var cardList = deckService.ListCards(DeckId, NextPage, ItemsPerPage, SearchFor);
+
+            ViewBag.ItemsPerPage = ItemsPerPage;
+            return View(cardList);
+        }
+
+      
+        [HttpPost]
+        public ViewResult SearchCardsInAllDecks(int ResourceId, int NextPage = 1, String SearchCardText = "")
+        {   
+            var cardList = deckService.SearchCardsInResource(ResourceId, NextPage, ItemsPerPage, SearchCardText);
+
             ViewBag.ItemsPerPage = ItemsPerPage;
             return View(cardList);
         }

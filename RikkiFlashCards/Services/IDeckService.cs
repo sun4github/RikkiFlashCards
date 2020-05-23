@@ -13,6 +13,7 @@ namespace AnkiFlashCards.Services
         #region Card
         //public CardListDto ListCards(int DeckId, String Direction, int Skip = 0, int Take = 10, String SearchFor = "");
         public CardListDto ListCards(int DeckId, int NextPage, int ItemsPerPage, String SearchFor = "");
+        public CardListDto SearchCardsInResource(int ResourceId, int NextPage, int ItemsPerPage, String SearchFor = "");
         public Card GetNextCard(int RevisionId);
         public Card GetNextCard(int RevisionId, int currentCardId);
         public Card GetPreviousCard(int RevisionId, int currentCardId);
