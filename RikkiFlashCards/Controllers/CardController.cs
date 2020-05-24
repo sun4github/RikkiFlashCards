@@ -180,7 +180,8 @@ namespace AnkiFlashCards.Controllers
                 var curCardDto = new CardRevisionViewDto(this.GetCardViewDto(nextCard, dck, rev.IsExam));
                 curCardDto.RevisionId = RevisionId;
                 curCardDto.TotalRevisedCount = rev.RevisedCount;
-                curCardDto.TotalCardCount = rev.TotalCardCount;               
+                curCardDto.TotalCardCount = rev.TotalCardCount;
+                SetRevisionStartTime();
                 return View("ViewExam", curCardDto);
             }
             else
@@ -249,6 +250,18 @@ namespace AnkiFlashCards.Controllers
             deckService.DeleteCard(CardId);
             return RedirectToAction(nameof(Index), new { DeckId = crd.DeckId });
         }
+
+        #region support methods
+
+        private void SetRevisionStartTime()
+        {
+            if(HttpContext.Session.GetString("revisionSessionStartTime") == null)
+            {
+                HttpContext.Session.SetString("revisionSessionStartTime", DateTime.Now.ToString("MMM dd, yyyy HH:mm:ss"));
+            }
+        }
+
+        #endregion
 
     }
 }

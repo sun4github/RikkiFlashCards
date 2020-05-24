@@ -123,7 +123,7 @@ namespace AnkiFlashCards.Controllers
         public ActionResult Revise(int DeckId)
         {
             var rev = deckService.ReviseDeck(DeckId, false);
-            SetRevisionStartTime();
+            ClearRevisionStartTime();
 
             return RedirectToAction("NextCard", "Card", new { CardId = 0, RevisionId = rev.RevisionId });
         }
@@ -139,7 +139,7 @@ namespace AnkiFlashCards.Controllers
         public ActionResult Quiz(int DeckId)
         {
             var rev = deckService.ReviseDeck(DeckId, true);
-            SetRevisionStartTime();
+            ClearRevisionStartTime();
 
             return RedirectToAction("NextCard", "Card", new { CardId = 0, RevisionId = rev.RevisionId });
         }
@@ -152,9 +152,9 @@ namespace AnkiFlashCards.Controllers
             return RedirectToAction(nameof(Index), new { ResourceId = dck.ResourceId });
         }
 
-        private void SetRevisionStartTime()
+        private void ClearRevisionStartTime()
         {
-           HttpContext.Session.SetString("revisionSessionStartTime", DateTime.Now.ToString("MMM dd, yyyy HH:mm:ss"));
+           HttpContext.Session.Remove("revisionSessionStartTime");
         }
     }
 }
