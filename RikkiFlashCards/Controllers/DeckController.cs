@@ -6,6 +6,7 @@ using AnkiFlashCards.Data;
 using AnkiFlashCards.Models.Domain;
 using AnkiFlashCards.Models.DTO;
 using AnkiFlashCards.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnkiFlashCards.Controllers
@@ -122,6 +123,7 @@ namespace AnkiFlashCards.Controllers
         public ActionResult Revise(int DeckId)
         {
             var rev = deckService.ReviseDeck(DeckId, false);
+            SetRevisionStartTime();
 
             return RedirectToAction("NextCard", "Card", new { CardId = 0, RevisionId = rev.RevisionId });
         }
@@ -137,6 +139,7 @@ namespace AnkiFlashCards.Controllers
         public ActionResult Quiz(int DeckId)
         {
             var rev = deckService.ReviseDeck(DeckId, true);
+            SetRevisionStartTime();
 
             return RedirectToAction("NextCard", "Card", new { CardId = 0, RevisionId = rev.RevisionId });
         }
@@ -147,6 +150,11 @@ namespace AnkiFlashCards.Controllers
             var dck = deckService.GetDeck(DeckId);
             deckService.DeleteDeck(DeckId);
             return RedirectToAction(nameof(Index), new { ResourceId = dck.ResourceId });
+        }
+
+        private void SetRevisionStartTime()
+        {
+           HttpContext.Session.SetString("revisionSessionStartTime", DateTime.Now.ToString("MMM dd, yyyy HH:mm:ss"));
         }
     }
 }

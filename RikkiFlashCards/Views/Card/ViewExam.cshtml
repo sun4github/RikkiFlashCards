@@ -1,6 +1,5 @@
 ﻿@model AnkiFlashCards.Models.DTO.CardRevisionViewDto
 @using AnkiFlashCards.Services;
-@using Microsoft.AspNetCore.Http;
 
 @{
     ViewData["Title"] = ((Model.IsExam == true) ? "Quiz for Deck " : "Revision card for Deck ") + @Model.DeckTitle;
@@ -97,5 +96,5 @@
     <a class="next round" asp-controller="Card" asp-action="NextCard" asp-route-direction="Next" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Next</a>
 </div>
 <script type="text/javascript">
-    CountTimeElapsedInSession(new Date("@ViewContext.HttpContext.Session.GetString("sessionStartTime")").getTime());
+    CountTimeElapsedInSession(new Date("@ViewContext.HttpContext.Session.GetString("revisionSessionStartTime")").getTime());
 </script>
