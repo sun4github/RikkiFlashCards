@@ -181,6 +181,10 @@ namespace AnkiFlashCards.Controllers
                 curCardDto.RevisionId = RevisionId;
                 curCardDto.TotalRevisedCount = rev.RevisedCount;
                 curCardDto.TotalCardCount = rev.TotalCardCount;
+                if(HttpContext.Session.GetInt32("sessionStartTime") == null)
+                {
+                    HttpContext.Session.SetString("sessionStartTime", DateTime.Now.ToString("MMM dd, yyyy HH:mm:ss"));
+                }
                 return View("ViewExam", curCardDto);
             }
             else

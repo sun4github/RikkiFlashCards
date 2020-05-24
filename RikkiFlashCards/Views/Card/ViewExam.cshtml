@@ -1,5 +1,6 @@
 ﻿@model AnkiFlashCards.Models.DTO.CardRevisionViewDto
 @using AnkiFlashCards.Services;
+@using Microsoft.AspNetCore.Http;
 
 @{
     ViewData["Title"] = ((Model.IsExam == true) ? "Quiz for Deck " : "Revision card for Deck ") + @Model.DeckTitle;
@@ -34,9 +35,16 @@
     }
 </script>
 <div>
+    <h6 id="tickingTimer"></h6>
     <h4>
         <a asp-controller="Deck" asp-action="EndRevision" asp-route-RevisionId="@Model.RevisionId" class="btn btn-sm btn-outline-danger">End Revision</a>
     </h4>
+</div>
+<div>
+    <a class="previous round" asp-controller="Card" asp-action="PrevCard" asp-route-direction="Prev" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Previous</a> |
+    <a class="next round" asp-controller="Card" asp-action="NextCard" asp-route-direction="Next" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Next</a>
+</div>
+<div>
     <hr />
     <dl class="row">
         <dt class="col-sm-12 text-info">
@@ -83,10 +91,11 @@
         </dd>
     </dl>
 </div>
+<hr />
 <div>
     <a class="previous round" asp-controller="Card" asp-action="PrevCard" asp-route-direction="Prev" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Previous</a> |
     <a class="next round" asp-controller="Card" asp-action="NextCard" asp-route-direction="Next" asp-route-CardId="@Model.CardId" asp-route-RevisionId="@Model.RevisionId">Next</a>
 </div>
 <script type="text/javascript">
-    //stripBRtoRN();
+    CountTimeElapsedInSession(new Date("@ViewContext.HttpContext.Session.GetString("sessionStartTime")").getTime());
 </script>

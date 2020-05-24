@@ -36,3 +36,26 @@ function escapeHtml(text) {
     alert('text output ' + replacedText);
     return replacedText;
 }
+
+
+function TickingTimer(startDateTime) {
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the start date from past
+    var distance = now - startDateTime;
+
+    // Time calculations for hours, minutes and seconds
+    var hours = Math.floor(distance / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Output the result in an element with id="tickingTimer"
+    document.getElementById("tickingTimer").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+}
+
+function CountTimeElapsedInSession(startDateTime) {  
+    TickingTimer(startDateTime);
+    // Update the count down every 5 seconds
+    var x = setInterval(TickingTimer, 5000, startDateTime);
+}
