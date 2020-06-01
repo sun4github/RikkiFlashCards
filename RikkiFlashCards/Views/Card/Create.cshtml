@@ -19,6 +19,7 @@
             <label asp-for="Front" class="control-label"></label>
             <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addCodeTag('@Html.IdFor(m=>m.Front)')" />
             <input type="button" class="btn btn-sm btn-outline-primary" value="[Link]" onclick="addCustomLinkTag('@Html.IdFor(m=>m.Front)')" />
+            <input type="button" class="btn btn-sm btn-outline-secondary" value="[Bold]" onclick="addCustomBoldTag('@Html.IdFor(m=>m.Front)')" />
             @Html.TextAreaFor(x => x.Front, 5, 500, htmlAttributes: new { style = "max-width: 100%;", @Value = "What is .. ?" })
             <span asp-validation-for="Front" class="text-danger"></span>
         </div>
@@ -26,6 +27,7 @@
             <label asp-for="Back" class="control-label"></label>
             <input type="button" class="btn btn-sm btn-outline-info" value="<Code>" onclick="addCodeTag('@Html.IdFor(m=>m.Back)')" />
             <input type="button" class="btn btn-sm btn-outline-primary" value="[Link]" onclick="addCustomLinkTag('@Html.IdFor(m=>m.Back)')" />
+            <input type="button" class="btn btn-sm btn-outline-secondary" value="[Bold]" onclick="addCustomBoldTag('@Html.IdFor(m=>m.Back)')" />
             @Html.TextAreaFor(x => x.Back, 10, 500, htmlAttributes: new { style = "max-width: 100%;" })
             <span asp-validation-for="Back" class="text-danger"></span>
         </div>

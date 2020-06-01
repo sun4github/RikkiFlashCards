@@ -12,6 +12,12 @@ function addCustomLinkTag(elementId) {
     document.getElementById(elementId).value += " [link][/link]";
 }
 
+function addCustomBoldTag(elementId) {
+    var curElementVal = document.getElementById(elementId).value;
+    var appendForwardNL = (curElementVal.length > 0) ? ("\r\n") : ("");
+    document.getElementById(elementId).value += " [bold][/bold]";
+}
+
 function stripBRtoRN() {
     var codeBlocks = document.getElementsByName("codeBlock");
     codeBlocks.forEach(x => {

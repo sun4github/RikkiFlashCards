@@ -13,35 +13,59 @@ namespace AnkiFlashCards.Services
         
         private const string onScreenWhileEditing_LinkRegex_Pattern = @"(?<entireLink>(?<openLink>\[link\])(?<hyperLink>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.*[a-zA-Z0-9()]{0,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))(?<closeLink>\[/link\]))";
         private const string onScreenWhileViewing_MainLinkRegex_Replacement = @"<a href=""${hyperLink}"" target=""_blank"">${hyperLink}</a>";
-        
+
+        private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[-a-zA-Z0-9@:%._\+~#=\s]{1,256})(?<closeBold>\[/bold\]))";
+        private const string onScreenWhileViewing_BoldRegex_Replacement = @"<b>${boldText}</b>";
+
         public static Card EncodeCardContentForReadonlyView(Card card)
         {
             List<string> linksInCardContent;
+            List<string> boldWordsInCardContent;
 
             var htmle = HtmlEncoder.Create();
+
+
             linksInCardContent = findCustomLinks(card.Front);
-            card.Front = htmle.Encode(card.Front);            
+            boldWordsInCardContent = findCustomBoldWords(card.Front);
+            card.Front = htmle.Encode(card.Front);
             card.Front = card.Front.Replace(htmle.Encode("<code>"), "<pre class='prettyprint lang-cs'>");
             card.Front = card.Front.Replace(htmle.Encode("</code>"), "</pre>");
-            foreach(var linkInCard in linksInCardContent)
+
+            foreach (var linkInCard in linksInCardContent)
             {
                 card.Front = card.Front.Replace(htmle.Encode(linkInCard), linkInCard);
             }
-            card.Front = AlterCustomLinkToHyperlink(card.Front);
+            card.Front = AlterCustomLinksToHyperlinks(card.Front);
+
+            foreach (var boldWordInCard in boldWordsInCardContent)
+            {
+                card.Front = card.Front.Replace(htmle.Encode(boldWordInCard), boldWordInCard);
+            }
+            card.Front = AlterCustomBoldWordsToBoldTags(card.Front);
 
 
             linksInCardContent = findCustomLinks(card.Back);
+            boldWordsInCardContent = findCustomBoldWords(card.Back);
             card.Back = htmle.Encode(card.Back);
             card.Back = card.Back.Replace(htmle.Encode("<code>"), "<pre class='prettyprint lang-cs'>");
             card.Back = card.Back.Replace(htmle.Encode("</code>"), "</pre>");
-            foreach (var linkInCard in linksInCardContent)
-            {
-                card.Back = card.Back.Replace(htmle.Encode(linkInCard), linkInCard);
-            }
-            card.Back = AlterCustomLinkToHyperlink(card.Back);
+
+            card.Back = ReplaceCustomMarkupWithHTMLMarkup(card.Back, linksInCardContent, htmle, AlterCustomLinksToHyperlinks);
+            card.Back = ReplaceCustomMarkupWithHTMLMarkup(card.Back, boldWordsInCardContent, htmle, AlterCustomBoldWordsToBoldTags);
 
             card = RestoreNewLine(card);
             return card;
+        }
+
+        private static string ReplaceCustomMarkupWithHTMLMarkup(string CardContent, List<string> markupContent, HtmlEncoder htmle, Func<string,string> AlterCustomMarkupToHTMLMarkup)
+        {
+
+            foreach (var boldWordInCard in markupContent)
+            {
+                CardContent = CardContent.Replace(htmle.Encode(boldWordInCard), boldWordInCard);
+            }
+            return AlterCustomBoldWordsToBoldTags(CardContent);
+            
         }
 
         private static List<string> findCustomLinks(string cardContent)
@@ -66,12 +90,48 @@ namespace AnkiFlashCards.Services
             return linksInContent;
         }
 
-        private static string AlterCustomLinkToHyperlink(string cardContent)
+        private static List<string> findCustomBoldWords(string cardContent)
+        {
+            var boldWords = new List<string>();
+            Match matchCollection;
+            try
+            {
+                matchCollection = Regex.Match(cardContent, onScreenWhileEditing_BoldRegex_Pattern,
+                                RegexOptions.IgnoreCase | RegexOptions.Compiled,
+                                TimeSpan.FromSeconds(1));
+                while (matchCollection.Success)
+                {
+                    boldWords.Add(matchCollection.Groups["entireBoldWord"].Value);
+                    matchCollection = matchCollection.NextMatch();
+                }
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                Console.WriteLine("The matching operation timed out.");
+            }
+            return boldWords;
+        }
+
+        private static string AlterCustomLinksToHyperlinks(string cardContent)
         {
             var modifiedCardContent = string.Empty;
             try
             {
                 modifiedCardContent = Regex.Replace(cardContent, onScreenWhileEditing_LinkRegex_Pattern, onScreenWhileViewing_MainLinkRegex_Replacement);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                Console.WriteLine("The matching operation timed out.");
+            }
+            return modifiedCardContent;
+        }
+
+        private static string AlterCustomBoldWordsToBoldTags(string cardContent)
+        {
+            var modifiedCardContent = string.Empty;
+            try
+            {
+                modifiedCardContent = Regex.Replace(cardContent, onScreenWhileEditing_BoldRegex_Pattern, onScreenWhileViewing_BoldRegex_Replacement);
             }
             catch (RegexMatchTimeoutException)
             {
