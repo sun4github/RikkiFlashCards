@@ -14,7 +14,7 @@ namespace AnkiFlashCards.Services
         private const string onScreenWhileEditing_LinkRegex_Pattern = @"(?<entireLink>(?<openLink>\[link\])(?<hyperLink>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.*[a-zA-Z0-9()]{0,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))(?<closeLink>\[/link\]))";
         private const string onScreenWhileViewing_MainLinkRegex_Replacement = @"<a href=""${hyperLink}"" target=""_blank"" style='font-family: cursive; font-stretch: condensed; font-size: 85%; color:darkorchid;'>${hyperLink}</a>";
 
-        private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[-a-zA-Z0-9@:%._\+~#=\s]{1,256})(?<closeBold>\[/bold\]))";
+        private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[-a-zA-Z0-9@:%._\+~#=\s\<\>\(\)\{\}&\?]{1,256})(?<closeBold>\[/bold\]))";
         private const string onScreenWhileViewing_BoldRegex_Replacement = @"<b style='font-family: ui-sans-serif; font-stretch: expanded; font-size: 125%; color:royalblue;'>${boldText}</b>";
 
         public static Card EncodeCardContentForReadonlyView(Card card)
@@ -48,14 +48,14 @@ namespace AnkiFlashCards.Services
             return card;
         }
 
-        private static string ReplaceCustomMarkupWithHTMLMarkup(string CardContent, List<string> markupContent, HtmlEncoder htmle, Func<string,string> AlterCustomMarkupToHTMLMarkup)
+        private static string ReplaceCustomMarkupWithHTMLMarkup(string CardContent, List<string> markupContent, HtmlEncoder htmle, Func<string,HtmlEncoder,string> AlterCustomMarkupToHTMLMarkup)
         {
 
             foreach (var markup in markupContent)
             {
                 CardContent = CardContent.Replace(htmle.Encode(markup), markup);
             }
-            return AlterCustomMarkupToHTMLMarkup(CardContent);
+            return AlterCustomMarkupToHTMLMarkup(CardContent, htmle);
             
         }
 
@@ -103,7 +103,7 @@ namespace AnkiFlashCards.Services
             return boldWords;
         }
 
-        private static string AlterCustomLinksToHyperlinks(string cardContent)
+        private static string AlterCustomLinksToHyperlinks(string cardContent, HtmlEncoder htmlEncoder)
         {
             var modifiedCardContent = string.Empty;
             try
@@ -117,12 +117,35 @@ namespace AnkiFlashCards.Services
             return modifiedCardContent;
         }
 
-        private static string AlterCustomBoldWordsToBoldTags(string cardContent)
+        private static string AlterCustomBoldWordsToBoldTags(string cardContent, HtmlEncoder htmlEncoder)
         {
             var modifiedCardContent = string.Empty;
+
+            Match matchCollection;
             try
             {
-                modifiedCardContent = Regex.Replace(cardContent, onScreenWhileEditing_BoldRegex_Pattern, onScreenWhileViewing_BoldRegex_Replacement);
+                matchCollection = Regex.Match(cardContent, onScreenWhileEditing_BoldRegex_Pattern,
+                                RegexOptions.IgnoreCase | RegexOptions.Compiled,
+                                TimeSpan.FromSeconds(1));
+
+                if(matchCollection.Success)
+                {
+                    while (matchCollection.Success)
+                    {
+                        var boldText_Replacement = matchCollection.Groups["boldText"].Value;
+                        boldText_Replacement = boldText_Replacement.Replace("<", htmlEncoder.Encode("<"));
+                        boldText_Replacement = boldText_Replacement.Replace(">", htmlEncoder.Encode(">"));
+                        boldText_Replacement = String.Concat("<b style='font-family: ui-sans-serif; font-stretch: expanded; font-size: 125%; color:royalblue;'>", boldText_Replacement, "</b>");
+                        modifiedCardContent = Regex.Replace(cardContent, onScreenWhileEditing_BoldRegex_Pattern, boldText_Replacement);
+
+                        matchCollection = matchCollection.NextMatch();
+                    }
+                }
+                else
+                {
+                    modifiedCardContent = cardContent;
+                }
+                
             }
             catch (RegexMatchTimeoutException)
             {
