@@ -12,10 +12,10 @@ namespace AnkiFlashCards.Services
     {
         
         private const string onScreenWhileEditing_LinkRegex_Pattern = @"(?<entireLink>(?<openLink>\[link\])(?<hyperLink>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.*[a-zA-Z0-9()]{0,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))(?<closeLink>\[/link\]))";
-        private const string onScreenWhileViewing_MainLinkRegex_Replacement = @"<a href=""${hyperLink}"" target=""_blank"">${hyperLink}</a>";
+        private const string onScreenWhileViewing_MainLinkRegex_Replacement = @"<a href=""${hyperLink}"" target=""_blank"" style='font-family: cursive; font-stretch: condensed; font-size: 85%; color:darkorchid;'>${hyperLink}</a>";
 
         private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[-a-zA-Z0-9@:%._\+~#=\s]{1,256})(?<closeBold>\[/bold\]))";
-        private const string onScreenWhileViewing_BoldRegex_Replacement = @"<b>${boldText}</b>";
+        private const string onScreenWhileViewing_BoldRegex_Replacement = @"<b style='font-family: ui-sans-serif; font-stretch: expanded; font-size: 125%; color:royalblue;'>${boldText}</b>";
 
         public static Card EncodeCardContentForReadonlyView(Card card)
         {
@@ -31,17 +31,8 @@ namespace AnkiFlashCards.Services
             card.Front = card.Front.Replace(htmle.Encode("<code>"), "<pre class='prettyprint lang-cs'>");
             card.Front = card.Front.Replace(htmle.Encode("</code>"), "</pre>");
 
-            foreach (var linkInCard in linksInCardContent)
-            {
-                card.Front = card.Front.Replace(htmle.Encode(linkInCard), linkInCard);
-            }
-            card.Front = AlterCustomLinksToHyperlinks(card.Front);
-
-            foreach (var boldWordInCard in boldWordsInCardContent)
-            {
-                card.Front = card.Front.Replace(htmle.Encode(boldWordInCard), boldWordInCard);
-            }
-            card.Front = AlterCustomBoldWordsToBoldTags(card.Front);
+            card.Front = ReplaceCustomMarkupWithHTMLMarkup(card.Front, linksInCardContent, htmle, AlterCustomLinksToHyperlinks);
+            card.Front = ReplaceCustomMarkupWithHTMLMarkup(card.Front, boldWordsInCardContent, htmle, AlterCustomBoldWordsToBoldTags);
 
 
             linksInCardContent = findCustomLinks(card.Back);
@@ -49,7 +40,7 @@ namespace AnkiFlashCards.Services
             card.Back = htmle.Encode(card.Back);
             card.Back = card.Back.Replace(htmle.Encode("<code>"), "<pre class='prettyprint lang-cs'>");
             card.Back = card.Back.Replace(htmle.Encode("</code>"), "</pre>");
-
+            
             card.Back = ReplaceCustomMarkupWithHTMLMarkup(card.Back, linksInCardContent, htmle, AlterCustomLinksToHyperlinks);
             card.Back = ReplaceCustomMarkupWithHTMLMarkup(card.Back, boldWordsInCardContent, htmle, AlterCustomBoldWordsToBoldTags);
 
@@ -60,11 +51,11 @@ namespace AnkiFlashCards.Services
         private static string ReplaceCustomMarkupWithHTMLMarkup(string CardContent, List<string> markupContent, HtmlEncoder htmle, Func<string,string> AlterCustomMarkupToHTMLMarkup)
         {
 
-            foreach (var boldWordInCard in markupContent)
+            foreach (var markup in markupContent)
             {
-                CardContent = CardContent.Replace(htmle.Encode(boldWordInCard), boldWordInCard);
+                CardContent = CardContent.Replace(htmle.Encode(markup), markup);
             }
-            return AlterCustomBoldWordsToBoldTags(CardContent);
+            return AlterCustomMarkupToHTMLMarkup(CardContent);
             
         }
 
