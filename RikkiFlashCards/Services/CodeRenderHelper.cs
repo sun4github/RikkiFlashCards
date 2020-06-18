@@ -130,13 +130,14 @@ namespace AnkiFlashCards.Services
 
                 if(matchCollection.Success)
                 {
+                    modifiedCardContent = cardContent;
                     while (matchCollection.Success)
                     {
                         var boldText_Replacement = matchCollection.Groups["boldText"].Value;
                         boldText_Replacement = boldText_Replacement.Replace("<", htmlEncoder.Encode("<"));
                         boldText_Replacement = boldText_Replacement.Replace(">", htmlEncoder.Encode(">"));
                         boldText_Replacement = String.Concat("<b style='font-family: ui-sans-serif; font-stretch: expanded; font-size: 125%; color:royalblue;'>", boldText_Replacement, "</b>");
-                        modifiedCardContent = Regex.Replace(cardContent, onScreenWhileEditing_BoldRegex_Pattern, boldText_Replacement);
+                        modifiedCardContent = modifiedCardContent.Replace($"[bold]{matchCollection.Groups["boldText"].Value}[/bold]", boldText_Replacement);
 
                         matchCollection = matchCollection.NextMatch();
                     }
