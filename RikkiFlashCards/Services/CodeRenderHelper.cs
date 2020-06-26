@@ -20,7 +20,7 @@ namespace AnkiFlashCards.Services
         private const string onScreenWhileEditing_LinkRegex_Pattern = @"(?<entireLink>(?<openLink>\[link\])(?<hyperLink>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.*[a-zA-Z0-9()]{0,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))(?<closeLink>\[/link\]))";
         private const string onScreenWhileViewing_MainLinkRegex_Replacement = @"<a href=""${hyperLink}"" target=""_blank"" style='font-family: cursive; font-stretch: condensed; font-size: 85%; color:darkorchid;'>${hyperLink}</a>";
 
-        private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[,-a-zA-Z0-9@:%._\+~#=\s\<\>\(\)\{\}&\?]{1,256})(?<closeBold>\[/bold\]))";
+        private const string onScreenWhileEditing_BoldRegex_Pattern = @"(?<entireBoldWord>(?<openBold>\[bold\])(?<boldText>[-a-zA-Z0-9@:%._\+~#=\s\<\>\(\)\{\}&\?]{1,256})(?<closeBold>\[/bold\]))";
         private const string onScreenWhileViewing_BoldRegex_Replacement = @"<b style='font-family: ui-sans-serif; font-stretch: expanded; font-size: 125%; color:royalblue;'>${boldText}</b>";
 
 
