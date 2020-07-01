@@ -55,7 +55,7 @@ namespace AnkiFlashCards.Controllers
                 updatedDeck.Title = editDeckDto.Title;
                 updatedDeck.IsShared = editDeckDto.IsShared;
                 deckService.EditDeck(updatedDeck);
-                return RedirectToAction(nameof(Index), new { ResourceId = editDeckDto.ResourceId });
+                return RedirectToAction(nameof(Index), new { ParentId = editDeckDto.ResourceId });
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace AnkiFlashCards.Controllers
                 };
                 deckService.AddDeck(newDeck);
 
-                return RedirectToAction(nameof(Index), new { ResourceId = createDeckDto.ResourceId });
+                return RedirectToAction(nameof(Index), new { ParentId = createDeckDto.ResourceId });
             }
             catch(Exception ex)
             {
@@ -149,7 +149,7 @@ namespace AnkiFlashCards.Controllers
         {
             var dck = deckService.GetDeck(DeckId);
             deckService.DeleteDeck(DeckId);
-            return RedirectToAction(nameof(Index), new { ResourceId = dck.ResourceId });
+            return RedirectToAction(nameof(Index), new { ParentId = dck.ResourceId });
         }
 
         private void ClearRevisionStartTime()
