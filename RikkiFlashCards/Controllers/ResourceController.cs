@@ -27,7 +27,7 @@ namespace AnkiFlashCards.Controllers
             var res = repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId).First();
             repositoryWrapper.Resource.Delete(res);
             repositoryWrapper.Save();
-            return RedirectToAction(nameof(Index), new { SubjectId = res.SubjectId });
+            return RedirectToAction(nameof(Index), new { ParentId = res.SubjectId });
         }
 
         [HttpGet]
@@ -56,7 +56,7 @@ namespace AnkiFlashCards.Controllers
                 repositoryWrapper.Resource.Create(newResource);
                 repositoryWrapper.Save();
 
-                return RedirectToAction(nameof(Index),new { SubjectId = createResourceDto.SubjectId });
+                return RedirectToAction(nameof(Index),new { ParentId = createResourceDto.SubjectId });
             }
             catch
             {
@@ -144,7 +144,7 @@ namespace AnkiFlashCards.Controllers
                 repositoryWrapper.Resource.Update(curRes);
                 repositoryWrapper.Save();
 
-                return RedirectToAction(nameof(Index),new { SubjectId = curRes.SubjectId});
+                return RedirectToAction(nameof(Index),new { ParentId = curRes.SubjectId});
             }
             catch
             {
