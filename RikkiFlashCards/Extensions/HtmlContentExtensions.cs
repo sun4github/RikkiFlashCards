@@ -9,9 +9,9 @@ using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace AnkiFlashCards.Services
+namespace AnkiFlashCards.Extensions
 {
-    public static class HtmlHelperExtensions
+    public static class HtmlContentExtensions
     {
        
         public static HtmlString ReplaceNewLineWithBr(this IHtmlContent content)

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RikkiFlashCards.Services
+namespace RikkiFlashCards.Extensions
 {
-    public static class QueryCollectionHelper
+    public static class QueryCollectionExtensions
     {
         public static Dictionary<string,string> ToQueryValueDictionary(this IQueryCollection queryCollection)
         {

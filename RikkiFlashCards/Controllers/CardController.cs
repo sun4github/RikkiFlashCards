@@ -10,6 +10,8 @@ using AnkiFlashCards.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AnkiFlashCards.Services;
+using RikkiFlashCards.Services.Contracts;
+using AnkiFlashCards.Services.Contracts;
 
 namespace AnkiFlashCards.Controllers
 {
@@ -17,12 +19,14 @@ namespace AnkiFlashCards.Controllers
     {
         private readonly IDeckService deckService;
         private IRepositoryWrapper repositoryWrapper;
+        private readonly ICodeRenderService _codeRenderService;
         private int ItemsPerPage = 10;
 
-        public CardController(IDeckService deckService, IRepositoryWrapper repositoryWrapper)
+        public CardController(IDeckService deckService, IRepositoryWrapper repositoryWrapper, ICodeRenderService codeRenderService)
         {
             this.deckService = deckService;
             this.repositoryWrapper = repositoryWrapper;
+            this._codeRenderService = codeRenderService;
         }
 
         [HttpGet]
@@ -142,7 +146,7 @@ namespace AnkiFlashCards.Controllers
         public ViewResult View(int CardId)
         {
             var crd = deckService.GetCard(CardId);
-            crd = CodeRenderHelper.EncodeCardContentForReadonlyView(crd);
+            crd = this._codeRenderService.EncodeCardContentForReadonlyView(crd);
             var dck = deckService.GetDeck(crd.DeckId);
             var curCardDto = this.GetCardViewDto(crd, dck);
             return View(curCardDto);
@@ -174,7 +178,7 @@ namespace AnkiFlashCards.Controllers
 
             if (nextCard != null)
             {
-                nextCard = CodeRenderHelper.EncodeCardContentForReadonlyView(nextCard);
+                nextCard = this._codeRenderService.EncodeCardContentForReadonlyView(nextCard);
                 var rev = deckService.GetRevision(RevisionId);
                 var dck = deckService.GetDeck(nextCard.DeckId);
                 var curCardDto = new CardRevisionViewDto(this.GetCardViewDto(nextCard, dck, rev.IsExam));
@@ -201,7 +205,7 @@ namespace AnkiFlashCards.Controllers
 
             if (nextCard != null)
             {
-                nextCard = CodeRenderHelper.EncodeCardContentForReadonlyView(nextCard);
+                nextCard = this._codeRenderService.EncodeCardContentForReadonlyView(nextCard);
                 var rev = deckService.GetRevision(RevisionId);
                 var dck = deckService.GetDeck(nextCard.DeckId);
                 var curCardDto = new CardRevisionViewDto(this.GetCardViewDto(nextCard, dck, rev.IsExam));
@@ -213,7 +217,7 @@ namespace AnkiFlashCards.Controllers
             else
             {
                 var currentCard = deckService.GetCard(CardId);
-                currentCard = CodeRenderHelper.EncodeCardContentForReadonlyView(currentCard);
+                currentCard = this._codeRenderService.EncodeCardContentForReadonlyView(currentCard);
                 var rev = deckService.GetRevision(RevisionId);
                 var dck = deckService.GetDeck(currentCard.DeckId);
                 var curCardDto = new CardRevisionViewDto(this.GetCardViewDto(currentCard, dck, rev.IsExam));

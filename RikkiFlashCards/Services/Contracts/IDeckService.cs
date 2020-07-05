@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AnkiFlashCards.Services
+namespace AnkiFlashCards.Services.Contracts
 {
     public interface IDeckService
     {

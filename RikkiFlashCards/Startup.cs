@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AnkiFlashCards.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using RikkiFlashCards.Services.Contracts;
+using AnkiFlashCards.Services.Contracts;
 
 namespace AnkiFlashCards
 {
@@ -37,15 +39,14 @@ namespace AnkiFlashCards
                 options.UseMySql(
                     Configuration.GetConnectionString("MySQLConnection")));
 
-
-
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<RikkiFlashCardsDbContext>();
             services.AddControllersWithViews();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IDeckService, DeckService>();
+            services.AddSingleton<IDeckService, DeckService>();
             services.AddRazorPages();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<ICodeRenderService, CodeRenderService>();
 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
 
