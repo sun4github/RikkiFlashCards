@@ -43,7 +43,7 @@ namespace AnkiFlashCards
                 .AddEntityFrameworkStores<RikkiFlashCardsDbContext>();
             services.AddControllersWithViews();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddSingleton<IDeckService, DeckService>();
+            services.AddScoped<IDeckService, DeckService>();
             services.AddRazorPages();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<ICodeRenderService, CodeRenderService>();
