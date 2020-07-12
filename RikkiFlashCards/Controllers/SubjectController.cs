@@ -6,6 +6,7 @@ using AnkiFlashCards.Data;
 using AnkiFlashCards.Models.Domain;
 using AnkiFlashCards.Models.DTO;
 using AnkiFlashCards.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnkiFlashCards.Controllers
@@ -20,6 +21,7 @@ namespace AnkiFlashCards.Controllers
             this.repositoryWrapper = repositoryWrapper;
         }
 
+        [Authorize]
         [HttpGet]
         public ViewResult Index(String Direction, int NextPage = 1)
         {

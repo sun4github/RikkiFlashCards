@@ -16,6 +16,8 @@ using AnkiFlashCards.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using RikkiFlashCards.Services.Contracts;
 using AnkiFlashCards.Services.Contracts;
+using RikkiFlashCards.Models.DomainModels;
+using RikkiFlashCards.Services;
 
 namespace AnkiFlashCards
 {
@@ -39,13 +41,27 @@ namespace AnkiFlashCards
                 options.UseMySql(
                     Configuration.GetConnectionString("MySQLConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<RikkiFlashCardsDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<RikkiFlashCardsDbContext>();
+
+            services.AddIdentity<FlashCardUser, IdentityRole>(idOpts =>
+                {
+                    idOpts.Password.RequiredLength = 5;
+                    idOpts.Password.RequireDigit = true;
+                    idOpts.Password.RequireLowercase = true;
+                    idOpts.Password.RequireUppercase = true;
+                    idOpts.Password.RequireNonAlphanumeric = false;                    
+                })
+                .AddEntityFrameworkStores<RikkiFlashCardsDbContext>()
+                .AddDefaultTokenProviders();
+           
+
             services.AddControllersWithViews();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddRazorPages();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<ILoginService, LoginService>();
             services.AddSingleton<ICodeRenderService, CodeRenderService>();
 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
@@ -86,6 +102,9 @@ namespace AnkiFlashCards
             {
                 routes.MapRoute(name: "default", template: "{controller=Subject}/{action=Index}");
             });
+
+            //setup admin
+            AdminService.SetupAdminUserAsync(app.ApplicationServices, Configuration).Wait();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using RikkiFlashCards.Models.DomainModels;
 
 namespace AnkiFlashCards.Models.Domain
 {
@@ -29,6 +30,8 @@ namespace AnkiFlashCards.Models.Domain
         public ICollection<Deck> Decks { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public FlashCardUser FlashCardUser { get; set; }
     }
 
     public enum ResourceType

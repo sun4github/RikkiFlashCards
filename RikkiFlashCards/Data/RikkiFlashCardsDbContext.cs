@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RikkiFlashCards.Models.DomainModels;
 
 namespace AnkiFlashCards.Data
 {
@@ -93,6 +94,7 @@ namespace AnkiFlashCards.Data
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<Revision> Revisions { get; set; }
+        public DbSet<FlashCardUser> FlashCardUsers { get; set; }
 
         public override int SaveChanges()
         {

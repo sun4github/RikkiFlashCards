@@ -3,14 +3,16 @@ using System;
 using AnkiFlashCards.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnkiFlashCards.Migrations
 {
     [DbContext(typeof(RikkiFlashCardsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200709184947_AddFlashCardUsers")]
+    partial class AddFlashCardUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,9 +89,6 @@ namespace AnkiFlashCards.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("FlashCardUserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -110,8 +109,6 @@ namespace AnkiFlashCards.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("ResourceId");
-
-                    b.HasIndex("FlashCardUserId");
 
                     b.HasIndex("SubjectId");
 
@@ -173,9 +170,6 @@ namespace AnkiFlashCards.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("FlashCardUserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -185,8 +179,6 @@ namespace AnkiFlashCards.Migrations
                         .HasMaxLength(1000);
 
                     b.HasKey("SubjectId");
-
-                    b.HasIndex("FlashCardUserId");
 
                     b.ToTable("Subjects");
                 });
@@ -396,9 +388,6 @@ namespace AnkiFlashCards.Migrations
                     b.Property<bool>("IsStudent")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("LoginCount")
-                        .HasColumnType("int");
-
                     b.HasDiscriminator().HasValue("FlashCardUser");
                 });
 
@@ -422,10 +411,6 @@ namespace AnkiFlashCards.Migrations
 
             modelBuilder.Entity("AnkiFlashCards.Models.Domain.Resource", b =>
                 {
-                    b.HasOne("RikkiFlashCards.Models.DomainModels.FlashCardUser", "FlashCardUser")
-                        .WithMany()
-                        .HasForeignKey("FlashCardUserId");
-
                     b.HasOne("AnkiFlashCards.Models.Domain.Subject", "Subject")
                         .WithMany("Resources")
                         .HasForeignKey("SubjectId")
@@ -440,13 +425,6 @@ namespace AnkiFlashCards.Migrations
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("AnkiFlashCards.Models.Domain.Subject", b =>
-                {
-                    b.HasOne("RikkiFlashCards.Models.DomainModels.FlashCardUser", "FlashCardUser")
-                        .WithMany()
-                        .HasForeignKey("FlashCardUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
