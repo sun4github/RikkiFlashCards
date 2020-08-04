@@ -32,7 +32,8 @@ namespace AnkiFlashCards.Controllers
             {
                 Skip = Skip,
                 Take = ItemsPerPage,
-                Subjects = subjects.Skip(Skip).Take(ItemsPerPage).ToList()
+                Subjects = subjects.Skip(Skip).Take(ItemsPerPage).ToList(),
+                TotalSubjectCount = subjects.Count()
             };
             ViewBag.ItemsPerPage = ItemsPerPage;
             return View(subjListDto);

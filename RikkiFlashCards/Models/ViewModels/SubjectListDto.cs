@@ -11,5 +11,6 @@ namespace AnkiFlashCards.Models.DTO
         public int Skip { get; set; }
         public int Take { get; set; }
         public IEnumerable<Subject> Subjects { get; set; }
+        public int TotalSubjectCount { get; set; }
     }
 }

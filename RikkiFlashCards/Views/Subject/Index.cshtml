@@ -11,8 +11,8 @@
         <a asp-action="Create">Create new Subject</a>
     </p>
     <div>
-        @await Component.InvokeAsync("Pagination", new { itemCount = Model.Subjects.Count(), itemsPerPage = ViewBag.ItemsPerPage })
-    </div>
+        @await Component.InvokeAsync("Pagination", new { itemCount = Model.TotalSubjectCount, itemsPerPage = ViewBag.ItemsPerPage })
+    </div>   
     <table class="table">
         <thead>
             <tr>
