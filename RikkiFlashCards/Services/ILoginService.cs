@@ -6,6 +6,6 @@ namespace RikkiFlashCards.Services
 {
     public interface ILoginService
     {
-        Task<SignInResult> ValidateLogin(LoginViewModel loginViewModel);
+        Task<SignInResult> IsLoginSuccessful(LoginViewModel loginViewModel);
     }
 }

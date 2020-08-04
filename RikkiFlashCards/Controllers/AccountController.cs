@@ -25,7 +25,7 @@ namespace RikkiFlashCards.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            var res = await _loginService.ValidateLogin(loginViewModel);
+            var res = await _loginService.IsLoginSuccessful(loginViewModel);
             if(res.Succeeded)
             {
                 return Redirect(loginViewModel.ReturnUrl);

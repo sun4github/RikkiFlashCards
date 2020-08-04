@@ -87,6 +87,9 @@ namespace AnkiFlashCards
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseDefaultFiles();
@@ -95,8 +98,7 @@ namespace AnkiFlashCards
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+          
 
             app.UseMvc(routes =>
             {
