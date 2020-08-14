@@ -95,6 +95,7 @@ namespace AnkiFlashCards.Controllers
 
                 //newCard = CodeRenderHelper.DecodeCardForCode(newCard);
                 deckService.AddCard(newCard);
+                deckService.AddFilesToCard(newCard,createCardDto.ImageFiles);
 
                 return RedirectToAction(nameof(View), new { CardId = newCard.CardId });
             }
@@ -255,6 +256,7 @@ namespace AnkiFlashCards.Controllers
             return RedirectToAction(nameof(Index), new { DeckId = crd.DeckId });
         }
 
+
         #region support methods
 
         private void SetRevisionStartTime()
@@ -264,6 +266,8 @@ namespace AnkiFlashCards.Controllers
                 HttpContext.Session.SetString("revisionSessionStartTime", DateTime.Now.ToString("MMM dd, yyyy HH:mm:ss"));
             }
         }
+
+
 
         #endregion
 

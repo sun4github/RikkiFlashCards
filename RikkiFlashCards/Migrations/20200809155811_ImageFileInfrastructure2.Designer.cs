@@ -3,14 +3,16 @@ using System;
 using AnkiFlashCards.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnkiFlashCards.Migrations
 {
     [DbContext(typeof(RikkiFlashCardsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200809155811_ImageFileInfrastructure2")]
+    partial class ImageFileInfrastructure2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -401,9 +403,6 @@ namespace AnkiFlashCards.Migrations
                     b.Property<string>("FileName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("FilePath")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<int>("FileSize")
                         .HasColumnType("int");
 
@@ -531,7 +530,7 @@ namespace AnkiFlashCards.Migrations
             modelBuilder.Entity("RikkiFlashCards.Models.DomainModels.ImageFile", b =>
                 {
                     b.HasOne("AnkiFlashCards.Models.Domain.Card", "Card")
-                        .WithMany("ImageFiles")
+                        .WithMany()
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

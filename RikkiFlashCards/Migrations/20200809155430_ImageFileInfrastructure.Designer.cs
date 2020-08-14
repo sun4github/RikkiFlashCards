@@ -3,14 +3,16 @@ using System;
 using AnkiFlashCards.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnkiFlashCards.Migrations
 {
     [DbContext(typeof(RikkiFlashCardsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200809155430_ImageFileInfrastructure")]
+    partial class ImageFileInfrastructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,13 +397,7 @@ namespace AnkiFlashCards.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FileName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("FilePath")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("FileSize")
@@ -411,8 +407,6 @@ namespace AnkiFlashCards.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("ImageFileId");
-
-                    b.HasIndex("CardId");
 
                     b.ToTable("ImageFiles");
                 });
@@ -524,15 +518,6 @@ namespace AnkiFlashCards.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RikkiFlashCards.Models.DomainModels.ImageFile", b =>
-                {
-                    b.HasOne("AnkiFlashCards.Models.Domain.Card", "Card")
-                        .WithMany("ImageFiles")
-                        .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

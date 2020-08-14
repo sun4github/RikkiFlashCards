@@ -95,6 +95,7 @@ namespace AnkiFlashCards.Data
         public DbSet<Card> Cards { get; set; }
         public DbSet<Revision> Revisions { get; set; }
         public DbSet<FlashCardUser> FlashCardUsers { get; set; }
+        public DbSet<ImageFile> ImageFiles { get; set; }
 
         public override int SaveChanges()
         {

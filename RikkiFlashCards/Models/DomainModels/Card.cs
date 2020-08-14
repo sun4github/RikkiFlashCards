@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RikkiFlashCards.Models.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -45,6 +48,9 @@ namespace AnkiFlashCards.Models.Domain
         public DifficultyLevel Level { get; set; }
 
         public bool IsDeleted { get; set; }
+                
+        [BindNever]
+        public ICollection<ImageFile> ImageFiles { get; set; }
     }
 
     public enum DifficultyLevel

@@ -1,5 +1,6 @@
 ﻿using AnkiFlashCards.Models.Domain;
 using AnkiFlashCards.Models.DTO;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace AnkiFlashCards.Services.Contracts
         public Revision ReviseDeck(int DeckId, bool isExam);
         public void EndRevision(int RevisionId);
         public Revision GetRevision(int RevisonId);
+        public void AddFilesToCard(Card card, IEnumerable<IFormFile> files);
 
         #endregion Deck
     }

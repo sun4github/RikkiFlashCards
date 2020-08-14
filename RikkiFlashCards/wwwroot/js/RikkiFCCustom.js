@@ -65,3 +65,18 @@ function CountTimeElapsedInSession(startDateTime) {
     // Update the count down every 5 seconds
     var x = setInterval(TickingTimer, 5000, startDateTime);
 }
+
+
+function readURL(input) {
+    alert('readURL');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#blah').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+}
+

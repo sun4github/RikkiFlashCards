@@ -1,4 +1,5 @@
 ﻿using AnkiFlashCards.Data.Repositories.Contracts;
+using RikkiFlashCards.Data.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace AnkiFlashCards.Data
         public IDeckRepository Deck { get;  }
         public ICardRepository Card { get;  }
         public IRevisionRepository Revision { get;  }
+        public IImageFileRepository ImageFile { get; }
         public void Save();
     }
 }

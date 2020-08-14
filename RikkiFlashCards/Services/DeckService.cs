@@ -2,9 +2,13 @@
 using AnkiFlashCards.Models.Domain;
 using AnkiFlashCards.Models.DTO;
 using AnkiFlashCards.Services.Contracts;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using RikkiFlashCards.Models.DomainModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,63 +16,65 @@ namespace AnkiFlashCards.Services
 {
     public class DeckService : IDeckService
     {
-        private readonly IRepositoryWrapper repositoryWrapper;
+        private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public DeckService(IRepositoryWrapper repositoryWrapper)
+        public DeckService(IRepositoryWrapper repositoryWrapper, IWebHostEnvironment webHostEnvironment)
         {
-            this.repositoryWrapper = repositoryWrapper;
+            this._repositoryWrapper = repositoryWrapper;
+            this._webHostEnvironment = webHostEnvironment;
         }
         public void AddCard(Card newCard)
-        {
-            this.repositoryWrapper.Card.Create(newCard);
-            this.repositoryWrapper.Save();
+        {           
+            this._repositoryWrapper.Card.Create(newCard);
+            this._repositoryWrapper.Save();
         }
 
         public void AddDeck(Deck newDeck)
         {
-            this.repositoryWrapper.Deck.Create(newDeck);
-            this.repositoryWrapper.Save();
+            this._repositoryWrapper.Deck.Create(newDeck);
+            this._repositoryWrapper.Save();
         }
 
         public void DeleteCard(int CardId)
         {
-            var crd = this.repositoryWrapper.Card.FindByCondition(c => c.CardId == CardId).First();
-            this.repositoryWrapper.Card.Delete(this.repositoryWrapper.Card.FindByCondition(c=>c.CardId==CardId).First());
-            this.repositoryWrapper.Save();
+            var crd = this._repositoryWrapper.Card.FindByCondition(c => c.CardId == CardId).First();
+            this._repositoryWrapper.Card.Delete(this._repositoryWrapper.Card.FindByCondition(c=>c.CardId==CardId).First());
+            this._repositoryWrapper.Save();
         }
 
         public void DeleteDeck(int DeckId)
         {
-            var dck = this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
-            this.repositoryWrapper.Deck.Delete(this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First());
-            this.repositoryWrapper.Save();
+            var dck = this._repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First();
+            this._repositoryWrapper.Deck.Delete(this._repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId).First());
+            this._repositoryWrapper.Save();
         }
 
         public void EditCard(Card editCard)
         {
             
-            this.repositoryWrapper.Card.Update(editCard);
-            this.repositoryWrapper.Save();
+            this._repositoryWrapper.Card.Update(editCard);
+            this._repositoryWrapper.Save();
         }
 
         public void EditDeck(Deck editDeck)
         {
-            this.repositoryWrapper.Deck.Update(editDeck);
-            this.repositoryWrapper.Save();
+            this._repositoryWrapper.Deck.Update(editDeck);
+            this._repositoryWrapper.Save();
         }
 
         public void EndRevision(int RevisionId)
         {
-            var rev = this.repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisionId).First();
+            var rev = this._repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisionId).First();
             rev.EndTime = DateTime.Now;
             rev.IsProperlyClosed = true;
-            repositoryWrapper.Revision.Update(rev);
-            repositoryWrapper.Save();
+            _repositoryWrapper.Revision.Update(rev);
+            _repositoryWrapper.Save();
         }
 
         public Deck GetDeck(int DeckId)
         {
-            return this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
+            return this._repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
                     .Include(d=>d.Cards)
                     .Include(d=>d.Revisions)
                     .First();
@@ -76,19 +82,20 @@ namespace AnkiFlashCards.Services
 
         public Resource GetResource(int ResourceId)
         {
-            return this.repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
+            return this._repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
                     .First();
         }
 
         public Card GetCard(int CardId)
         {
-            return this.repositoryWrapper.Card.FindByCondition(c => c.CardId == CardId)
-                    .First();
+            return this._repositoryWrapper.Card.FindByCondition(c => c.CardId == CardId)
+                        .Include(c=>c.ImageFiles)
+                        .First();
         }
 
         public Revision GetRevision(int RevisonId)
         {
-            return this.repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisonId)
+            return this._repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisonId)
                     .First();
         }
 
@@ -111,7 +118,7 @@ namespace AnkiFlashCards.Services
         private Card GetACard(int RevisionId, int currentCardId = 0, bool isNext = true)
         {
             var additive = (isNext == true) ? 1 : -1;
-            var rev = this.repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisionId).First();
+            var rev = this._repositoryWrapper.Revision.FindByCondition(r => r.RevisionId == RevisionId).First();
             var currentCardIndex = (currentCardId == 0) ? 0 : rev.CardOrderList.FindIndex(ci => ci == currentCardId);
             var nextCardId = (currentCardId == 0)?(rev.CardOrderList[0]) :rev.CardOrderList.ElementAtOrDefault(currentCardIndex + additive);
             
@@ -127,18 +134,18 @@ namespace AnkiFlashCards.Services
                 
                 rev.RevisedCount = (isNext == true && nextCardIndex > lastCardIndex) ? rev.RevisedCount + 1 : rev.RevisedCount;
 
-                nextCard = this.repositoryWrapper.Card.FindByCondition(c => c.CardId == nextCardId).First();
+                nextCard = this._repositoryWrapper.Card.FindByCondition(c => c.CardId == nextCardId).First();
             }
 
-            repositoryWrapper.Save();
+            _repositoryWrapper.Save();
             return nextCard;
         }
 
         public CardListDto ListCards(int DeckId, int NextPage, int ItemsPerPage, String SearchFor = "")
         {
-            var selDeck = this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
+            var selDeck = this._repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
                         .First();
-            IQueryable<Card> cards = this.repositoryWrapper.Card.FindByCondition(c => c.DeckId == DeckId);
+            IQueryable<Card> cards = this._repositoryWrapper.Card.FindByCondition(c => c.DeckId == DeckId);
             if (!String.IsNullOrWhiteSpace(SearchFor))
             {
                 cards = cards.Where(c => c.Front.Contains(SearchFor, StringComparison.OrdinalIgnoreCase) || c.Back.Contains(SearchFor, StringComparison.OrdinalIgnoreCase));
@@ -162,12 +169,12 @@ namespace AnkiFlashCards.Services
 
         public CardListDto SearchCardsInResource(int ResourceId, int NextPage, int ItemsPerPage, String SearchFor = "")
         {
-            var selResource = this.repositoryWrapper.Resource
+            var selResource = this._repositoryWrapper.Resource
                                 .FindByCondition(d => d.ResourceId == ResourceId)
                                 .Include(r => r.Decks)
                                 .First();
             var selDeckIDs = selResource.Decks.Select(d => d.DeckId);
-            IQueryable<Card> cards = this.repositoryWrapper.Card.FindByCondition(c => selDeckIDs.Contains(c.DeckId));
+            IQueryable<Card> cards = this._repositoryWrapper.Card.FindByCondition(c => selDeckIDs.Contains(c.DeckId));
 
             if (!String.IsNullOrWhiteSpace(SearchFor))
             {
@@ -194,7 +201,7 @@ namespace AnkiFlashCards.Services
 
         public DeckListViewModel ListDecks(int ResourceId, int NextPage, int ItemsPerPage, string OrderBy = null, string SearchText = "")
         {
-            var selResource = this.repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
+            var selResource = this._repositoryWrapper.Resource.FindByCondition(r => r.ResourceId == ResourceId)
                         .Include(r => r.Decks)
                             .ThenInclude(d => d.Cards)
                         .Include(r => r.Decks)
@@ -243,19 +250,53 @@ namespace AnkiFlashCards.Services
             };
 
             var rand = new Random();
-            var cardIds = this.repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
+            var cardIds = this._repositoryWrapper.Deck.FindByCondition(d => d.DeckId == DeckId)
                             .Include(r => r.Cards)
                             .First().Cards.Select(c=>c.CardId);
             rev.CardOrderList = (IsExam == true)?cardIds.OrderBy(c => rand.Next(0, cardIds.Count())).ToList():cardIds.ToList();
             rev.TotalCardCount = cardIds.Count();
-            repositoryWrapper.Revision.Create(rev);
-            repositoryWrapper.Save();
+            _repositoryWrapper.Revision.Create(rev);
+            _repositoryWrapper.Save();
             return rev;
         }
 
         public IEnumerable<Card> SearchCards(String SearchFor)
         {
-            return this.repositoryWrapper.Card.FindByCondition(c => c.Front.Contains(SearchFor) || c.Back.Contains(SearchFor));
+            return this._repositoryWrapper.Card.FindByCondition(c => c.Front.Contains(SearchFor) || c.Back.Contains(SearchFor));
+        }
+
+        public void AddFilesToCard(Card card, IEnumerable<IFormFile> files)
+        {
+            if(files != null)
+            {
+                foreach(var formFile in files)
+                {
+                    if(formFile.Length > 0)
+                    {
+                        //save a file record to get id
+                        var newImageFile = new ImageFile
+                        {
+                            CardId = card.CardId                            
+                        };
+                        _repositoryWrapper.ImageFile.Create(newImageFile);
+                        _repositoryWrapper.Save();
+
+                        //get full path to the final location where we save the file
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath,"ImageFiles",string.Concat(newImageFile.ImageFileId.ToString(),Path.GetExtension(formFile.FileName)));
+                        using(var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            formFile.CopyTo(stream);
+                        }
+
+                        newImageFile.FileName = Path.GetFileName(filePath);
+                        newImageFile.FilePath = filePath;
+                        _repositoryWrapper.ImageFile.Update(newImageFile);
+                        _repositoryWrapper.Save();
+                    }
+                }
+            }
+
+            //now add files card
         }
     }
 }

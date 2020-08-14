@@ -1,5 +1,7 @@
 ﻿using AnkiFlashCards.Data.Repositories;
 using AnkiFlashCards.Data.Repositories.Contracts;
+using RikkiFlashCards.Data.Repositories;
+using RikkiFlashCards.Data.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace AnkiFlashCards.Data
         private DeckRepository deckRepository;
         private CardRepository cardRepository;
         private RevisionRepository revisionRepository;
+        private IImageFileRepository imageFileRepository;
 
         public RepositoryWrapper(RikkiFlashCardsDbContext applicationDbContext)
         {
@@ -69,6 +72,19 @@ namespace AnkiFlashCards.Data
                 return revisionRepository;
             }
         }
+
+        public IImageFileRepository ImageFile
+        {
+            get
+            {
+                if (imageFileRepository == null)
+                    imageFileRepository = new ImageFileRepository(this.applicationDbContext);
+
+                return imageFileRepository;
+            }
+        }
+
+      
 
         public void Save()
         {
