@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# ignore appsettings secrets
+**/appsettings.development.json
+**/appsettings.staging.json
+**/appsettings.production.json
+
 # User-specific files
 *.rsuser
 *.suo
@@ -329,11 +334,6 @@ ASALocalRun/
 
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
-
-# ignore appsettings secrets
-**/appsettings.development.json
-**/appsettings.staging.json
-**/appsettings.production.json
 
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
