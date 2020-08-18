@@ -68,15 +68,32 @@ function CountTimeElapsedInSession(startDateTime) {
 
 
 function readURL(input) {
-    alert('readURL');
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('#blah').attr('src', e.target.result);
+    if (input.files) {
+        var prevImgCount = $('.upImg').length;        
+        for (var i = 0; i < input.files.length; i++) {
+            var fileName = input.files[i].name;
+            alert(fileName);
+            (function (fileName, inputFile) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imgId = fileName;
+                    $('#imageArea').append('<img id="' + imgId + '" class="upImg" width="100" height="100"  />');
+                    $('#' + imgId).attr('src', e.target.result);
+                }
+                reader.readAsDataURL(inputFile); // convert to base64 string
+            }).call(this, i + prevImgCount, input.files[i]);
         }
-
-        reader.readAsDataURL(input.files[0]); // convert to base64 string
     }
+
+
+    //if (input.files && input.files[0]) {
+    //    var reader = new FileReader();
+
+    //    reader.onload = function (e) {
+    //        $('#blah').attr('src', e.target.result);
+    //    }
+
+    //    reader.readAsDataURL(input.files[0]); // convert to base64 string
+    //}
 }
 
