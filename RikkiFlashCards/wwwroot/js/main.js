@@ -141,3 +141,7 @@
   });
 
 })(jQuery);
+
+//set the focus for fast editing
+$('#Front').focus();
+$('#Clone').focus();

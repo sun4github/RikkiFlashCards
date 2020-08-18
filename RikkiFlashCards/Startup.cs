@@ -18,6 +18,7 @@ using RikkiFlashCards.Services.Contracts;
 using AnkiFlashCards.Services.Contracts;
 using RikkiFlashCards.Models.DomainModels;
 using RikkiFlashCards.Services;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AnkiFlashCards
 {
@@ -65,6 +66,7 @@ namespace AnkiFlashCards
             services.AddSingleton<ICodeRenderService, CodeRenderService>();
 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
+            services.AddControllersWithViews().AddRazorRuntimeCompilation(); // needed for changes in .cshtml to be reflected. 
 
             //session
             services.AddMemoryCache();
